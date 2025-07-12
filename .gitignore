@@ -1,3 +1,35 @@
+Android build files
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+
+# Firebase secrets and config
+google-services.json
+app/google-services.json
+
+# NDK
+.cxx/
+
+# Log files
+*.log
+
+# Keystore files (very important!)
+*.jks
+*.keystore
+
+# OS-specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
 *.iml
 .gradle
 /local.properties
