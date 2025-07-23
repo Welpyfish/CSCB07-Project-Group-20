@@ -1,19 +1,33 @@
 <resources>
-    <string name="app_name">B07 Demo Summer 2024</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="delete_item">Delete Item</string>
-    <string name="add_item">Add Item</string>
-    <string name="back">Back</string>
-    <string name="recyclerview">RecyclerView</string>
-    <string name="scroller">Scroller</string>
-    <string name="spinner">Spinner</string>
-    <string name="manage_items">Manage Items</string>
+    <!-- launch page -->
+    <string name="app_name">App Name</string>
+    <string name="welcome">Welcome to</string>
+    <string name="disclaimer">NAME is designed to help you create a personalized safety plan.\n\nNAME is not a substitute for emergency services. Safety plans are personal and not guaranteed to prevent harm.</string>
+    <string name="agreement">I understand and agree\nto the above disclaimer.</string>
+    <string name="get_started">GET STARTED</string>
+
+    <!-- sign up/in page -->
+    <string name="createAcc">Create an account</string>
+    <string name="sign_in_text">Already have an account? <u>Sign in with PIN</u></string>
+    <string name="google">Sign in with Google</string>
+    <string name="facebook">Sign in with Facebook</string>
+    <string name="twitter">Sign in with Twitter</string>
+    <string name="email">Sign in with email</string>
+    <string name="phone">Sign in with phone</string>
+
+    <!-- set PIN page -->
+    <string name="set_pin">Set PIN</string>
+    <string name="backspace">Backspace</string>
+
+    <string name="default_web_client_id">674706693867-4na2cbn3fdjseu5fd0a14qahjjl5s3f2.apps.googleusercontent.com</string>
+
+
 
     <string-array name="categories_array">
         <item>Books</item>
         <item>Movies</item>
     </string-array>
+
 
 
 </resources>
