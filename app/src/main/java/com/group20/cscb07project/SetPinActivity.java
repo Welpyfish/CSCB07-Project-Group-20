@@ -1,5 +1,7 @@
 package com.group20.cscb07project;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -47,6 +49,17 @@ public class SetPinActivity extends AppCompatActivity {
             updatePinDots();
             if (pin.size() == PIN_LENGTH) {
                 // TODO: Handle PIN complete (e.g., save or verify PIN)
+                SharedPreferences preferences = getSharedPreferences("projectpreferences", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                StringBuilder p = new StringBuilder();
+                for(int i=0; i<pin.size(); i++){
+                    p.append(pin.get(i));
+                }
+                editor.putString("PIN", String.valueOf(p));
+                editor.apply();
+                Intent intent = new Intent(SetPinActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         }
     }

@@ -7,8 +7,6 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.b07demosummer2024.SignupActivity;
-
 public class LaunchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -19,9 +17,11 @@ public class LaunchActivity extends AppCompatActivity {
         getStartedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LaunchActivity.this, SignupActivity.class);
+                Intent intent = new Intent(LaunchActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
+
+
     }
 } 
