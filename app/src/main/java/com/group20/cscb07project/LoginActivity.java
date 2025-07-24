@@ -45,6 +45,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        FloatingExitButton exitButton = findViewById(R.id.exitButton);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exitButton.setActivity(LoginActivity.this);
+                exitButton.exitApp();
+            }
+        });
         SharedPreferences preferences = getSharedPreferences("projectpreferences", MODE_PRIVATE);
         String pin = preferences.getString("PIN", null);
 

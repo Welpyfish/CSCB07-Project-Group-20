@@ -22,11 +22,12 @@
     <string name="default_web_client_id">674706693867-4na2cbn3fdjseu5fd0a14qahjjl5s3f2.apps.googleusercontent.com</string>
 
 
-
     <string-array name="categories_array">
         <item>Books</item>
         <item>Movies</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
