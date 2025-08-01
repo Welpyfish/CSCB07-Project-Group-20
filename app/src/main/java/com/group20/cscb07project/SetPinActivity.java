@@ -97,6 +97,9 @@ public class SetPinActivity extends AppCompatActivity {
                     if(i >= 10 || !stored){
                         Toast.makeText(this, "Error saving pin, try again", Toast.LENGTH_SHORT).show();
                         clearPin();
+                    }else{
+                        startActivity(new Intent(this, LaunchActivity.class));
+                        finish();
                     }
                 }
             }
