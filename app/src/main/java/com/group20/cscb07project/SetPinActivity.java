@@ -99,7 +99,7 @@ public class SetPinActivity extends AppCompatActivity {
                         clearPin();
                     }
                         clearPin();
-                        startActivity(new Intent(this, LaunchActivity.class));
+                        startActivity(new Intent(this, LoginActivity.class));
                         finish();
 
                 }
