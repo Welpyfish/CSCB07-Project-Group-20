@@ -54,4 +54,6 @@ dependencies {
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
     implementation("com.firebaseui:firebase-ui-auth:9.0.0")
+
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
 }

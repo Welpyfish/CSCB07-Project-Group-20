@@ -28,6 +28,8 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     // See: https://developer.android.com/training/basics/intents/result
+
+    private boolean existsPin;
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
             new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
@@ -44,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        existsPin = PinManager.doesPinExist(this);
 
         FloatingExitButton exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
@@ -53,18 +56,15 @@ public class LoginActivity extends AppCompatActivity {
                 exitButton.exitApp();
             }
         });
-        SharedPreferences preferences = getSharedPreferences("projectpreferences", MODE_PRIVATE);
-        String pin = preferences.getString("PIN", null);
 
-        if (pin != null) {
+        if (existsPin) {
             TextView pinLogin = findViewById(R.id.PinTextView);
             pinLogin.setVisibility(View.VISIBLE);
-
-            //IF PIN EXISTS, SHOW A PIN LOGIN OPTION
-//            SharedPreferences.Editor editor = preferences.edit();
-//            editor.putInt("PIN", 1234);
-//            editor.apply();
+            pinLogin.setOnClickListener(v -> {
+                    startActivity(new Intent(this, SetPinActivity.class));
+            });
         }
+
 
         //this goes to the login flow. IDK IF FIREBASEUI COUNTS OR NOT FOR MVP
         TextView firebaseLogin = findViewById(R.id.FirebaseTextView);
@@ -107,13 +107,11 @@ public class LoginActivity extends AppCompatActivity {
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
-            SharedPreferences preferences = getSharedPreferences("projectpreferences", MODE_PRIVATE);
-            String pin = preferences.getString("PIN", null);
-            if(pin==null){
+            if (!existsPin){
                 Intent intent = new Intent(LoginActivity.this, SetPinActivity.class);
                 startActivity(intent);
-                finish();
             }
+
 
             //go to main page
             // ...
