@@ -20,7 +20,7 @@ public class SetPinActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_set_pin);
+        setContentView(R.layout.fragment_set_pin);
 
         pinDots = new ImageView[] {
                 findViewById(R.id.pinDot1),
@@ -57,7 +57,7 @@ public class SetPinActivity extends AppCompatActivity {
                 }
                 editor.putString("PIN", String.valueOf(p));
                 editor.apply();
-                Intent intent = new Intent(SetPinActivity.this, LoginActivity.class);
+                Intent intent = new Intent(SetPinActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }

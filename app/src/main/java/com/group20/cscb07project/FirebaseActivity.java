@@ -3,6 +3,7 @@ package com.group20.cscb07project;
 import static com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL;
 
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,11 +58,19 @@ public class FirebaseActivity extends AppCompatActivity {
     }
 
     private void reload(){
-        //go to the app
+        // Navigate to MainActivity
+        Intent intent = new Intent(FirebaseActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void updateUI(FirebaseUser user){
-
+        if (user != null) {
+            // Navigate to MainActivity after successful authentication
+            Intent intent = new Intent(FirebaseActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     public void createAccountEP(String email, String password){

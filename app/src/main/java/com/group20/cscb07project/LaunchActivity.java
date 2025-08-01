@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,17 +17,40 @@ public class LaunchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_launch);
+        setContentView(R.layout.fragment_launch);
 
         getStartedButton = findViewById(R.id.getStartedButton);
         exitButton = findViewById(R.id.exitButton);
         CheckBox disclaimerCheckbox = findViewById(R.id.disclaimerCheckbox);
+        TextView disclaimerTextView = findViewById(R.id.disclaimerTextView);
+
+        // Initially disable the button
+        getStartedButton.setEnabled(false);
+        getStartedButton.setAlpha(0.5f);
+
+        disclaimerCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                // Enable button and hide warning
+                getStartedButton.setEnabled(true);
+                getStartedButton.setAlpha(1.0f);
+                disclaimerTextView.setText(getString(R.string.disclaimer));
+                disclaimerTextView.setTextColor(getResources().getColor(R.color.grey));
+            } else {
+                // Disable button and show warning
+                getStartedButton.setEnabled(false);
+                getStartedButton.setAlpha(0.5f);
+                disclaimerTextView.setText("Please accept the terms and conditions to proceed");
+                disclaimerTextView.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+            }
+        });
 
         getStartedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LaunchActivity.this, LoginActivity.class);
-                startActivity(intent);
+                if (disclaimerCheckbox.isChecked()) {
+                    Intent intent = new Intent(LaunchActivity.this, SignupActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
