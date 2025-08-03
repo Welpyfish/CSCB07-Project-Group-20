@@ -8,7 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.widget.TextView;
+import android.widget.Button;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 
@@ -41,7 +43,20 @@ public class SignupActivity extends AppCompatActivity {
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            // ...
+            
+            // Check if PIN exists, if not go to SetPinActivity
+            SharedPreferences preferences = getSharedPreferences("projectpreferences", MODE_PRIVATE);
+            String pin = preferences.getString("PIN", null);
+            if(pin==null){
+                Intent intent = new Intent(SignupActivity.this, SetPinActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                // Navigate to MainActivity
+                Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
         } else {
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
@@ -63,27 +78,34 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.fragment_login);
 
-        TextView signInWithPin = findViewById(R.id.PinTextView);
-        SpannableString content = new SpannableString("Sign in with PIN");
-        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-        signInWithPin.setText(content);
-        signInWithPin.setOnClickListener(v -> {
-            Intent intent = new Intent(SignupActivity.this, SetPinActivity.class);
-            startActivity(intent);
+        // Set up click listeners for the sign-in buttons
+        Button emailSignInButton = findViewById(R.id.emailSignInButton);
+        Button googleSignInButton = findViewById(R.id.googleSignInButton);
+
+        emailSignInButton.setOnClickListener(v -> {
+            // Handle email sign-in
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
+                    new AuthUI.IdpConfig.EmailBuilder().build());
+
+            Intent signInIntent = AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(providers)
+                    .build();
+            signInLauncher.launch(signInIntent);
         });
 
-// Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
+        googleSignInButton.setOnClickListener(v -> {
+            // Handle Google sign-in
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
+                    new AuthUI.IdpConfig.GoogleBuilder().build());
 
-// Create and launch sign-in intent
-        Intent signInIntent = AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .build();
-        signInLauncher.launch(signInIntent);
+            Intent signInIntent = AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(providers)
+                    .build();
+            signInLauncher.launch(signInIntent);
+        });
     }
 } 
