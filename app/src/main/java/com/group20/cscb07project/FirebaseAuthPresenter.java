@@ -20,8 +20,8 @@ public class FirebaseAuthPresenter {
 
 
     public void createAccountEP(String email, String password){
-        if(!email.contains("@") || password.length()<8){
-            view.notifyError("invalid email or password");
+        if(!email.contains("@")){
+            view.notifyError("invalid email");
             return;
         }
         //validate email/pw first
@@ -40,8 +40,8 @@ public class FirebaseAuthPresenter {
 
 
     public void signInEP(String email, String password) {
-        if(!email.contains("@") || password.length()<8){
-            view.notifyError("invalid email or password");
+        if(!email.contains("@")){
+            view.notifyError("invalid email");
             return;
         }
         model.signInEmailPassword(email, password, new AuthResultCallback() {

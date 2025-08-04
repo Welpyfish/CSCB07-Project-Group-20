@@ -22,6 +22,7 @@ import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,7 +57,8 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("projectpreferences", MODE_PRIVATE);
         String pin = preferences.getString("PIN", null);
 
-        if (pin != null) {
+        //pin is only allowed if firebase already has a session
+        if (FirebaseAuth.getInstance().getCurrentUser() != null && pin != null) {
             TextView pinLogin = findViewById(R.id.PinTextView);
             pinLogin.setVisibility(View.VISIBLE);
 
