@@ -23,13 +23,11 @@ public class EmergencyInfoFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_emergency_info, container, false);
 
-        // Initialize views
         documentsButton = view.findViewById(R.id.documents_button);
         contactsButton = view.findViewById(R.id.contacts_button);
         locationsButton = view.findViewById(R.id.locations_button);
         medicationsButton = view.findViewById(R.id.medications_button);
 
-        // Setup click listeners
         contactsButton.setOnClickListener(v -> loadFragment(new EmergencyContactsFragment()));
 
         return view;

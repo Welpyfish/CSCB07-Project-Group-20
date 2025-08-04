@@ -33,7 +33,6 @@
         app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
 
 
-    <!-- Resources List -->
     <LinearLayout
         android:id="@+id/buttonsLinearLayout"
         android:layout_width="0dp"
@@ -106,19 +105,6 @@
             app:iconSize="24dp"
             app:elevation="16dp"/>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/SignOutTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="416dp"
-        android:text="Sign out"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.506"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createAccTextView" />
 
     <com.group20.cscb07project.FloatingExitButton
         android:id="@+id/exitButton"

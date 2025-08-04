@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -35,6 +36,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import com.group20.cscb07project.PinManager;
 
 public class AuthenActivity extends AppCompatActivity {
     private View currentFragmentView;
@@ -57,24 +59,24 @@ public class AuthenActivity extends AppCompatActivity {
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
-            // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Toast.makeText(this, "Authentication successful!", Toast.LENGTH_SHORT).show();
             
             // Check if PIN exists, if not go to SetPinActivity
-            SharedPreferences preferences = getSharedPreferences("projectpreferences", MODE_PRIVATE);
-            String pin = preferences.getString("PIN", null);
-            if(pin==null){
-                showSetPinFragment();
+            boolean pinExists = PinManager.doesPinExist(this);
+            if(!pinExists){
+                // First time user - create PIN
+                Intent intent = new Intent(AuthenActivity.this, SetPinActivity.class);
+                startActivity(intent);
             } else {
-                // Navigate to MainActivity
+                // PIN exists, navigate to main
                 Intent intent = new Intent(AuthenActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
         } else {
-            // Sign in failed
-            Toast.makeText(this, "Authentication failed!", Toast.LENGTH_SHORT).show();
+            if (response != null) {
+                Toast.makeText(this, "Authentication failed: " + response.getError().getMessage(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -84,7 +86,6 @@ public class AuthenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        // Start with launch fragment
         showLaunchFragment();
     }
 
@@ -103,11 +104,9 @@ public class AuthenActivity extends AppCompatActivity {
 
         disclaimerCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                // Enable button
                 getStartedButton.setEnabled(true);
                 getStartedButton.setAlpha(1.0f);
             } else {
-                // Disable button
                 getStartedButton.setEnabled(false);
                 getStartedButton.setAlpha(0.5f);
             }
@@ -144,15 +143,15 @@ public class AuthenActivity extends AppCompatActivity {
             }
         });
         
-        SharedPreferences preferences = getSharedPreferences("projectpreferences", MODE_PRIVATE);
-        String pin = preferences.getString("PIN", null);
+        boolean pinExists = PinManager.doesPinExist(this);
 
-        if (pin != null) {
-            TextView pinLogin = fragmentView.findViewById(R.id.PINSignInButton);
-            pinLogin.setVisibility(View.VISIBLE);
+        MaterialButton pinSignInButton = fragmentView.findViewById(R.id.PINSignInButton);
+        if (pinExists) {
+            pinSignInButton.setVisibility(View.VISIBLE);
+        } else {
+            pinSignInButton.setVisibility(View.GONE);
         }
 
-        // Set up email sign-in button
         Button emailSignInButton = fragmentView.findViewById(R.id.emailSignInButton);
         emailSignInButton.setOnClickListener(v -> {
             // Handle email sign-in
@@ -166,7 +165,6 @@ public class AuthenActivity extends AppCompatActivity {
             signInLauncher.launch(signInIntent);
         });
 
-        // Set up Google sign-in button
         Button googleSignInButton = fragmentView.findViewById(R.id.googleSignInButton);
         googleSignInButton.setOnClickListener(v -> {
             // Handle Google sign-in
@@ -180,15 +178,21 @@ public class AuthenActivity extends AppCompatActivity {
             signInLauncher.launch(signInIntent);
         });
 
-        TextView signout = fragmentView.findViewById(R.id.SignOutTextView);
-        signout.setOnClickListener(v -> {
-            // Handle sign out logic here
-        });
+
     }
 
     public void showSetPinFragment() {
         View fragmentView = getLayoutInflater().inflate(R.layout.fragment_set_pin, null);
         setFragmentView(fragmentView);
+
+        // Set the title based on whether PIN exists
+        TextView titleTextView = fragmentView.findViewById(R.id.setPinTextView);
+        boolean pinExists = PinManager.doesPinExist(this);
+        if (pinExists) {
+            titleTextView.setText(R.string.enter_pin);
+        } else {
+            titleTextView.setText(R.string.set_pin);
+        }
 
         pinDots = new ImageView[] {
                 fragmentView.findViewById(R.id.pinDot1),
@@ -217,9 +221,6 @@ public class AuthenActivity extends AppCompatActivity {
     public void showSignupFragment() {
         View fragmentView = getLayoutInflater().inflate(R.layout.fragment_login, null);
         setFragmentView(fragmentView);
-        
-        // Handle signup logic here
-        // For now, just navigate back to login
         showLoginFragment();
     }
 
@@ -233,25 +234,47 @@ public class AuthenActivity extends AppCompatActivity {
     }
 
     private void onDigitPressed(int digit) {
-        if (pin.size() < PIN_LENGTH) {
-            pin.add(digit);
-            updatePinDots();
-            if (pin.size() == PIN_LENGTH) {
-                // Handle PIN complete
-                SharedPreferences preferences = getSharedPreferences("projectpreferences", MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                StringBuilder p = new StringBuilder();
-                for(int i=0; i<pin.size(); i++){
-                    p.append(pin.get(i));
+        try {
+            if (pin.size() < PIN_LENGTH) {
+                pin.add(digit);
+                updatePinDots();
+                if (pin.size() == PIN_LENGTH) {
+                    StringBuilder p = new StringBuilder();
+                    for(int i=0; i<pin.size(); i++){
+                        p.append(pin.get(i));
+                    }
+                    String pinString = p.toString();
+                    
+                    // Check if PIN exists to determine if we're setting or entering
+                    boolean pinExists = PinManager.doesPinExist(this);
+                    
+                                    if (!pinExists) {
+                    // Setting new PIN
+                    boolean saved = PinManager.savePin(this, pinString);
+                    if (saved) {
+                        Intent intent = new Intent(AuthenActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                } else {
+                    boolean isCorrect = PinManager.verifyPin(this, pinString);
+                    if (isCorrect) {
+                        Toast.makeText(this, "Welcome back!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(AuthenActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        // Wrong PIN
+                        pin.clear();
+                        updatePinDots();
+                        Toast.makeText(this, "Incorrect PIN. Please try again.", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                editor.putString("PIN", String.valueOf(p));
-                editor.apply();
-                
-                // Navigate to MainActivity after PIN setup
-                Intent intent = new Intent(AuthenActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                }
             }
+        } catch (Exception e) {
+            pin.clear();
+            updatePinDots();
         }
     }
 

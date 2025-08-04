@@ -30,13 +30,11 @@ public class LaunchActivity extends AppCompatActivity {
 
         disclaimerCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                // Enable button and hide warning
                 getStartedButton.setEnabled(true);
                 getStartedButton.setAlpha(1.0f);
                 disclaimerTextView.setText(getString(R.string.disclaimer));
                 disclaimerTextView.setTextColor(getResources().getColor(R.color.grey));
             } else {
-                // Disable button and show warning
                 getStartedButton.setEnabled(false);
                 getStartedButton.setAlpha(0.5f);
                 disclaimerTextView.setText("Please accept the terms and conditions to proceed");
@@ -48,7 +46,7 @@ public class LaunchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (disclaimerCheckbox.isChecked()) {
-                    Intent intent = new Intent(LaunchActivity.this, SignupActivity.class);
+                    Intent intent = new Intent(LaunchActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
             }

@@ -27,19 +27,15 @@ public class AppButton extends Button {
     }
 
     private void init() {
-        // Set default styling based on the style specification
-        setBackgroundColor(getResources().getColor(R.color.bg)); // Background color
-        setTextColor(getResources().getColor(R.color.white)); // White text
+
+        setBackgroundColor(getResources().getColor(R.color.bg));
+        setTextColor(getResources().getColor(R.color.white));
         setTextSize(20);
-        setTypeface(getTypeface(), android.graphics.Typeface.BOLD); // Bold text style
-        setGravity(android.view.Gravity.CENTER); // Center gravity
-        setPadding(24, 12, 24, 12); // Padding: 24dp start/end, 12dp top/bottom
+        setTypeface(getTypeface(), android.graphics.Typeface.BOLD);
+        setGravity(android.view.Gravity.CENTER);
+        setPadding(24, 12, 24, 12);
         setElevation(6f);
-        
-        // Set corner radius (3dp)
         setClipToOutline(true);
-        
-        // Set default layout parameters
         setLayoutParams(new android.view.ViewGroup.LayoutParams(
             android.view.ViewGroup.LayoutParams.MATCH_PARENT, 
             android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -49,7 +45,6 @@ public class AppButton extends Button {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        // Ensure the button has proper styling when attached to window
         setBackgroundColor(getResources().getColor(R.color.bg));
         setTextColor(getResources().getColor(R.color.white));
     }

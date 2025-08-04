@@ -26,13 +26,8 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        // Initialize views
         changePinButton = view.findViewById(R.id.change_pin_button);
-
-
-        // Setup click listeners
         changePinButton.setOnClickListener(v -> loadFragment(new ChangePinFragment()));
-
 
         return view;
     }

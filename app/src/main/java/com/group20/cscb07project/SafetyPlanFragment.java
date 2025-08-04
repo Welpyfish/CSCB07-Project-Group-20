@@ -20,11 +20,9 @@ public class SafetyPlanFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_safety_plan, container, false);
 
-        // Initialize views
         titleText = view.findViewById(R.id.safety_plan_title);
         subtitleText = view.findViewById(R.id.safety_plan_subtitle);
 
-        // Set text
         titleText.setText(R.string.safety_plan_title);
         subtitleText.setText(R.string.safety_plan_subtitle);
 

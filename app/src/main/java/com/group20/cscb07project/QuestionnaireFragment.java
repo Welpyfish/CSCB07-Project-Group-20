@@ -16,9 +16,7 @@ public class QuestionnaireFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_questionnaire, container, false);
-
         TextView titleText = view.findViewById(R.id.questionnaire_title);
-
         titleText.setText(R.string.questionnaire_title);
 
         return view;

@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.group20.cscb07project.FloatingExitButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,21 +30,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize Firebase
         db = FirebaseDatabase.getInstance("https://b07-demo-summer-2024-default-rtdb.firebaseio.com/");
         auth = FirebaseAuth.getInstance();
 
-        // Initialize views
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         exitButton = findViewById(R.id.exitButton);
 
-        // Setup bottom navigation
         setupBottomNavigation();
-
-        // Setup emergency exit
         setupEmergencyExit();
 
-        // Load default fragment
         if (savedInstanceState == null) {
             loadFragment(new HomeFragment());
             bottomNavigationView.setSelectedItemId(R.id.nav_home);
@@ -62,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new SettingsFragment();
             } else if (item.getItemId() == R.id.nav_safety_plan) {
                 fragment = new SafetyPlanFragment();
-
             }
             if (fragment != null) {
                 loadFragment(fragment);

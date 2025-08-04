@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/ScreenStyle">
 
-    <!-- Title -->
     <TextView
         android:id="@+id/setPinTextView"
         android:layout_width="wrap_content"
@@ -18,7 +17,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/pinIndicatorLayout" />
 
-    <!-- PIN Indicator (4 dots) -->
     <LinearLayout
         android:id="@+id/pinIndicatorLayout"
         android:layout_width="wrap_content"
@@ -34,7 +32,6 @@
         <ImageView android:id="@+id/pinDot4" android:layout_width="16dp" android:layout_height="16dp" android:src="@drawable/pin_dot_unfilled" android:layout_margin="8dp" />
     </LinearLayout>
 
-    <!-- Numeric Keypad -->
     <GridLayout
         android:id="@+id/keypadGrid"
         android:layout_width="wrap_content"
@@ -46,7 +43,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Row 1 -->
         <Button
             android:id="@+id/btn1"
             style="@style/PINButton"
@@ -59,7 +55,6 @@
             android:id="@+id/btn3"
             style="@style/PINButton"
             android:text="3" />
-        <!-- Row 2 -->
         <Button
             android:id="@+id/btn4"
             style="@style/PINButton"
@@ -72,7 +67,6 @@
             android:id="@+id/btn6"
             style="@style/PINButton"
             android:text="6" />
-        <!-- Row 3 -->
         <Button
             android:id="@+id/btn7"
             style="@style/PINButton"
@@ -85,7 +79,6 @@
             android:id="@+id/btn9"
             style="@style/PINButton"
             android:text="9" />
-        <!-- Row 4: empty, 0, backspace -->
         <Space
             android:layout_width="64dp"
             android:layout_height="64dp" />

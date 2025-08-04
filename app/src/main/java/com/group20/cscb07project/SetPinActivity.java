@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
+
+import android.widget.TextView;
 import android.widget.Toast;
 import com.group20.cscb07project.PinManager;
 
@@ -27,6 +29,16 @@ public class SetPinActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_set_pin);
+
+        p = new StringBuilder();
+
+        // Set the title based on if PIN exists
+        TextView titleTextView = findViewById(R.id.setPinTextView);
+        if (PinManager.doesPinExist(this)) {
+            titleTextView.setText(R.string.enter_pin);
+        } else {
+            titleTextView.setText(R.string.set_pin);
+        }
 
         pinDots = new ImageView[] {
                 findViewById(R.id.pinDot1),
@@ -55,6 +67,7 @@ public class SetPinActivity extends AppCompatActivity {
             updatePinDots();
             if (pin.size() == PIN_LENGTH) {
 
+                p.setLength(0);
                 for (int num : pin) {
                     p.append(num);
                 }
@@ -62,22 +75,19 @@ public class SetPinActivity extends AppCompatActivity {
 
                 if (PinManager.doesPinExist(this)) {
                     if (PinManager.verifyPin(this, enteredPin)) {
-                        // Correct pin entered
-                        startActivity(new Intent(this, LoginActivity.class));
+                        Toast.makeText(this, "Welcome back!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(this, MainActivity.class));
                         finish();
                     } else {
-                        //Incorrect pin entered
                         tries++;
                         Toast.makeText(this, "Incorrect PIN. Please try again.", Toast.LENGTH_SHORT).show();
                         clearPin();
                         if (tries >= 3) {
-                            startActivity(new Intent(this, LaunchActivity.class));
+                            startActivity(new Intent(this, LoginActivity.class));
                             finish();
                         }
-
                     }
                 } else {
-                    //Set pin
                     boolean stored = false;
                     int i = 0;
                     while ((!stored) && (i < 10)) {
@@ -87,19 +97,18 @@ public class SetPinActivity extends AppCompatActivity {
                     if (i >= 10 || !stored) {
                         Toast.makeText(this, "Error saving pin, try again", Toast.LENGTH_SHORT).show();
                         clearPin();
+                    } else {
+                        startActivity(new Intent(this, MainActivity.class));
+                        finish();
                     }
-                    clearPin();
-                    startActivity(new Intent(this, LoginActivity.class));
-                    finish();
                 }
             }
         }
     }
     private void clearPin(){
-        for( int i = 0 ; i < 4; i++ ){
-            onBackspacePressed();
-        }
+        pin.clear();
         p.setLength(0);
+        updatePinDots();
     }
     private void onBackspacePressed() {
         if (!pin.isEmpty()) {

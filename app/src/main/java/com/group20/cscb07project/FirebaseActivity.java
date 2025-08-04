@@ -50,31 +50,28 @@ public class FirebaseActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
+        if (currentUser != null) {
             reload();
         }
     }
 
-    private void reload(){
-        // Navigate to MainActivity
+    private void reload() {
         Intent intent = new Intent(FirebaseActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
 
-    private void updateUI(FirebaseUser user){
+    private void updateUI(FirebaseUser user) {
         if (user != null) {
-            // Navigate to MainActivity after successful authentication
             Intent intent = new Intent(FirebaseActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
     }
 
-    public void createAccountEP(String email, String password){
-        //validate email/pw first
+    public void createAccountEP(String email, String password) {
+        // Validate email/pw first
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -96,23 +93,16 @@ public class FirebaseActivity extends AppCompatActivity {
                 });
     }
 
-    public void signInEP(String email, String password){
+    public void signInEP(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            //Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
                         } else {
-                            // If sign in fails, display a message to the user.
-                            //Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            //small popup message
                             Toast.makeText(FirebaseActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
                         }
                     }
                 });
@@ -137,7 +127,7 @@ public class FirebaseActivity extends AppCompatActivity {
 //    }
 
 
-    public void signInG(){
+    public void signInG() {
         // Instantiate a Google sign-in request
         GetGoogleIdOption googleIdOption = new GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(true)
@@ -151,7 +141,7 @@ public class FirebaseActivity extends AppCompatActivity {
 
         CredentialManager credentialManager = CredentialManager.create(FirebaseActivity.this);
         credentialManager.getCredentialAsync(FirebaseActivity.this, request, null,
-                Executors.newSingleThreadExecutor(),new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
+                Executors.newSingleThreadExecutor(), new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
                     @Override
                     public void onResult(GetCredentialResponse result) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -163,19 +153,16 @@ public class FirebaseActivity extends AppCompatActivity {
                     public void onError(GetCredentialException e) {
                         System.out.println();
                     }
-                } );
+                });
     }
 
     private void handleSignInG(Credential credential) {
-        // Check if credential is of type Google ID
         if (credential instanceof CustomCredential) {
             CustomCredential customCredential = (CustomCredential) credential;
-            if(credential.getType().equals(TYPE_GOOGLE_ID_TOKEN_CREDENTIAL)) {
-                // Create Google ID Token
+            if (credential.getType().equals(TYPE_GOOGLE_ID_TOKEN_CREDENTIAL)) {
                 Bundle credentialData = customCredential.getData();
                 GoogleIdTokenCredential googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credentialData);
 
-                // Sign in to Firebase with using the token
                 firebaseAuthWithGoogle(googleIdTokenCredential.getIdToken());
             }
         } else {
@@ -188,37 +175,12 @@ public class FirebaseActivity extends AppCompatActivity {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success");
                         FirebaseUser user = mAuth.getCurrentUser();
                         updateUI(user);
                     } else {
-                        // If sign in fails, display a message to the user
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
                         updateUI(null);
-                    }
-                });
-    }
-
-    private void signOut() {
-        // Firebase sign out
-        mAuth.signOut();
-
-        // When a user signs out, clear the current user credential state from all credential providers.
-        ClearCredentialStateRequest clearRequest = new ClearCredentialStateRequest();
-        credentialManager.clearCredentialStateAsync(
-                clearRequest,
-                null,
-                Executors.newSingleThreadExecutor(),
-                new CredentialManagerCallback<Void, ClearCredentialException>() {
-                    @Override
-                    public void onResult(@NonNull Void result) {
-                        updateUI(null);
-                    }
-
-                    @Override
-                    public void onError(@NonNull ClearCredentialException e) {
-                        Log.e(TAG, "Couldn't clear user credentials: " + e.getLocalizedMessage());
                     }
                 });
     }
