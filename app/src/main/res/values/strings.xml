@@ -11,6 +11,14 @@
     <string name="PIN">Sign in with PIN</string>
     <string name="google">Sign in with Google</string>
     <string name="email">Sign in with email</string>
+    <string name="sign_in_with_email">Sign in with Email</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_in_with_pin">Sign in with PIN</string>
+    <string name="or">or</string>
+    <string name="signup_welcome">Create Your Account</string>
+    <string name="signup_subtitle">Join us to start your safety journey</string>
+    <string name="signup_footer">By creating an account, you agree to our terms and privacy policy</string>
+    <string name="app_logo">App Logo</string>
 
     <!-- set PIN page -->
     <string name="set_pin">Set PIN</string>
@@ -60,8 +68,8 @@
     <!-- questionnaire -->
     <string name="questionnaire_title">Safety Assessment</string>
     <string name="questionnaire_subtitle">Answer these questions to create your personalized safety plan</string>
-    <string name="warm_up_title">Warm-Up Questions</string>
-    <string name="branch_specific_title">Branch-Specific Questions</string>
+    <string name="warm_up_title">Screening Questions</string>
+    <string name="branch_specific_title">Specific Questions</string>
     <string name="follow_up_title">Follow-Up &amp; Stabilization</string>
     
     <!-- Warm-Up Questions -->

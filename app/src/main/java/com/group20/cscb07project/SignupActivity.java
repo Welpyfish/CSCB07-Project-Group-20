@@ -78,7 +78,7 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_login);
+        setContentView(R.layout.fragment_signup);
 
         // Set up click listeners for the sign-in buttons
         Button emailSignInButton = findViewById(R.id.emailSignInButton);
