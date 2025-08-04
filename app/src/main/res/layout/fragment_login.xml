@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ScreenStyle"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:contentDescription="App Logo"
+        android:scaleType="centerInside"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/backspace"
+        app:layout_constraintBottom_toTopOf="@+id/createAccTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.2" />
+    <TextView
+        android:id="@+id/createAccTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/createAcc"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
+
+
+    <!-- Resources List -->
+    <LinearLayout
+        android:id="@+id/buttonsLinearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createAccTextView">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/PINSignInButton"
+            android:layout_marginTop="30dp"
+            android:layout_height="64dp"
+            android:layout_width="300dp"
+            android:backgroundTint="@color/darkGreen"
+            android:text="@string/PIN"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.8"
+            android:layout_gravity="center"
+            app:icon="@drawable/ic_pin"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:elevation="16dp"
+            app:iconSize="24dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/emailSignInButton"
+            android:layout_marginTop="18dp"
+            android:layout_height="64dp"
+            android:layout_width="300dp"
+            android:backgroundTint="@color/darkRed"
+            android:text="@string/email"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.8"
+            android:layout_gravity="center"
+            app:icon="@drawable/ic_email"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:elevation="16dp"
+            app:iconSize="24dp"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/googleSignInButton"
+            android:layout_width="300dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="18dp"
+            android:backgroundTint="@color/white"
+            android:text="@string/google"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/FirebaseTextView"
+            app:layout_constraintWidth_percent="0.8"
+            app:icon="@drawable/ic_google"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconTint="@null"
+            app:iconSize="24dp"
+            app:elevation="16dp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/SignOutTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="416dp"
+        android:text="Sign out"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createAccTextView" />
+
+    <com.group20.cscb07project.FloatingExitButton
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/emergency_exit"
+        android:src="@drawable/ic_exit"
+        app:backgroundTint="@color/darkRed"
+        app:tint="@color/white"
+        app:fabSize="mini"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout> 

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    tools:context=".SignupActivity">
+
+    <!-- Logo -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="80dp"
+        android:contentDescription="@string/app_logo"
+        android:src="@drawable/ic_launcher_foreground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Welcome Text -->
+    <TextView
+        android:id="@+id/welcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/signup_welcome"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
+
+    <!-- Subtitle -->
+    <TextView
+        android:id="@+id/subtitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/signup_subtitle"
+        android:textColor="@color/grey"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
+
+    <!-- Buttons Container -->
+    <LinearLayout
+        android:id="@+id/buttonsLinearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="48dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subtitleText">
+
+        <!-- Email Sign In Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/emailSignInButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/email_button_background"
+            android:drawableStart="@drawable/ic_email"
+            android:drawablePadding="12dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text="@string/sign_in_with_email"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/darkRed"
+            app:cornerRadius="8dp"
+            app:icon="@drawable/ic_email"
+            app:iconGravity="textStart"
+            app:iconPadding="12dp"
+            app:iconTint="@color/white" />
+
+        <!-- Google Sign In Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/googleSignInButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/google_button_background"
+            android:drawableStart="@drawable/ic_google"
+            android:drawablePadding="12dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text="@string/sign_in_with_google"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/white"
+            app:cornerRadius="8dp"
+            app:icon="@drawable/ic_google"
+            app:iconGravity="textStart"
+            app:iconPadding="12dp"
+            app:iconTint="@color/black"
+            app:strokeColor="@color/grey"
+            app:strokeWidth="1dp" />
+
+        <!-- Or Divider -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="@color/grey" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/or"
+                android:textColor="@color/grey"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="@color/grey" />
+
+        </LinearLayout>
+
+        <!-- Sign In with PIN Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/PINSignInButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/email_button_background"
+            android:drawableStart="@drawable/ic_pin"
+            android:drawablePadding="12dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text="@string/sign_in_with_pin"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/darkGreen"
+            app:cornerRadius="8dp"
+            app:icon="@drawable/ic_pin"
+            app:iconGravity="textStart"
+            app:iconPadding="12dp"
+            app:iconTint="@color/white" />
+
+    </LinearLayout>
+
+    <!-- Footer Text -->
+    <TextView
+        android:id="@+id/footerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="@string/signup_footer"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Exit Button -->
+    <com.group20.cscb07project.FloatingExitButton
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/emergency_exit"
+        android:src="@drawable/ic_exit"
+        app:backgroundTint="@color/darkRed"
+        app:fabSize="mini"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+</androidx.constraintlayout.widget.ConstraintLayout> 
