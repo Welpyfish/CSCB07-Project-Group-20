@@ -86,24 +86,31 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-    <Button style="@style/ButtonPrimary"
-        android:layout_marginTop="48dp"
+    <com.group20.cscb07project.AppButton
         android:id="@+id/getStartedButton"
+        android:layout_marginTop="36dp"
+        android:layout_height="56dp"
+        android:layout_width="match_parent"
+        android:backgroundTint="@color/darkGreen"
         android:text="@string/get_started"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/disclaimerLayout"
-        app:layout_constraintWidth_percent="0.8" />
+        app:layout_constraintWidth_percent="0.8"
+        />
 
     <com.group20.cscb07project.FloatingExitButton
         android:id="@+id/exitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/exit_button_icon" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_margin="16dp"
+        android:contentDescription="@string/emergency_exit"
+        android:src="@drawable/ic_exit"
+        app:backgroundTint="@color/darkRed"
+        app:tint="@color/white"
+        app:fabSize="mini"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout> 

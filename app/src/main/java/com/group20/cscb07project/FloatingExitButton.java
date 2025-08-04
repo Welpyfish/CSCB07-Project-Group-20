@@ -1,6 +1,6 @@
 package com.group20.cscb07project;
 
-import static android.app.PendingIntent.getActivity;
+
 
 import android.app.Activity;
 import android.content.Context;

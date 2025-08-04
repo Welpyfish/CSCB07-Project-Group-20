@@ -9,6 +9,14 @@ import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.view.View;
+import java.util.ArrayList;
+import com.google.android.material.button.MaterialButton;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -23,12 +31,19 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;
+import com.group20.cscb07project.PinManager;
 
 public class LoginActivity extends AppCompatActivity {
     // See: https://developer.android.com/training/basics/intents/result
+    private boolean existsPin;
+    FloatingExitButton exitButton;
+
+
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
             new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
@@ -44,9 +59,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.fragment_login);
+        existsPin = PinManager.doesPinExist(this);
 
-        FloatingExitButton exitButton = findViewById(R.id.exitButton);
+        exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,31 +70,38 @@ public class LoginActivity extends AppCompatActivity {
                 exitButton.exitApp();
             }
         });
-        SharedPreferences preferences = getSharedPreferences("projectpreferences", MODE_PRIVATE);
-        String pin = preferences.getString("PIN", null);
+        // Check if PIN exists using PinManager
+        boolean pinExists = PinManager.doesPinExist(this);
 
-        //pin is only allowed if firebase already has a session
-        if (FirebaseAuth.getInstance().getCurrentUser() != null && pin != null) {
-            TextView pinLogin = findViewById(R.id.PinTextView);
-            pinLogin.setVisibility(View.VISIBLE);
-
-            //IF PIN EXISTS, SHOW A PIN LOGIN OPTION
-//            SharedPreferences.Editor editor = preferences.edit();
-//            editor.putInt("PIN", 1234);
-//            editor.apply();
+        MaterialButton pinSignInButton = findViewById(R.id.PINSignInButton);
+        if (pinExists) {
+            pinSignInButton.setVisibility(View.VISIBLE);
+            pinSignInButton.setOnClickListener(v -> {
+                showEnterPinFragment();
+            });
+        } else {
+            pinSignInButton.setVisibility(View.GONE);
         }
 
-        //this goes to the login flow. IDK IF FIREBASEUI COUNTS OR NOT FOR MVP
-        TextView firebaseLogin = findViewById(R.id.FirebaseTextView);
-
-        firebaseLogin.setOnClickListener(v -> {
-            //this might all be useless since its not really mvp
-            // Choose authentication providers
+        MaterialButton emailSignInButton = findViewById(R.id.emailSignInButton);
+        emailSignInButton.setOnClickListener(v -> {
+            // Handle email sign-in
             List<AuthUI.IdpConfig> providers = Arrays.asList(
-                    new AuthUI.IdpConfig.EmailBuilder().build(),
+                    new AuthUI.IdpConfig.EmailBuilder().build());
+
+            Intent signInIntent = AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(providers)
+                    .build();
+            signInLauncher.launch(signInIntent);
+        });
+
+        MaterialButton googleSignInButton = findViewById(R.id.googleSignInButton);
+        googleSignInButton.setOnClickListener(v -> {
+            // Handle Google sign-in
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
                     new AuthUI.IdpConfig.GoogleBuilder().build());
 
-// Create and launch sign-in intent
             Intent signInIntent = AuthUI.getInstance()
                     .createSignInIntentBuilder()
                     .setAvailableProviders(providers)
@@ -90,12 +113,12 @@ public class LoginActivity extends AppCompatActivity {
 //            startActivity(intent);
 
         });
-
-        TextView signout = findViewById(R.id.SignOutTextView);
-
-        signout.setOnClickListener(v -> {
-            signOut();
-        });
+//
+//        TextView signout = findViewById(R.id.SignOutTextView);
+//
+//        signout.setOnClickListener(v -> {
+//            signOut();
+//        });
     }
 //
 
@@ -108,33 +131,105 @@ public class LoginActivity extends AppCompatActivity {
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
-            // Successfully signed in
-            SharedPreferences preferences = getSharedPreferences("projectpreferences", MODE_PRIVATE);
-            String pin = preferences.getString("PIN", null);
-            if(pin==null){
-                Intent intent = new Intent(LoginActivity.this, SetPinActivity.class);
-                startActivity(intent);
-                finish();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                boolean pinExists = PinManager.doesPinExist(this);
+                if (!pinExists) {
+                    // First time user - create PIN
+                    Intent intent = new Intent(LoginActivity.this, SetPinActivity.class);
+                    startActivity(intent);
+                } else {
+                    // PIN exists, navigate to main
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
-
-            //go to main page
-            // ...
-
         } else {
-            // Sign in failed. If response is null the user canceled the
-            // sign-in flow using the back button. Otherwise check
-            // response.getError().getErrorCode() and handle the error.
-            // ...
+            if (response != null) {
+                Toast.makeText(this, "Authentication failed: " + response.getError().getMessage(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
-    private void signOut(){
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // ...
+    private void showEnterPinFragment() {
+        View enterPinView = getLayoutInflater().inflate(R.layout.fragment_enter_pin, null);
+        setContentView(enterPinView);
+
+        ImageView[] pinDots = {
+                enterPinView.findViewById(R.id.pinDot1),
+                enterPinView.findViewById(R.id.pinDot2),
+                enterPinView.findViewById(R.id.pinDot3),
+                enterPinView.findViewById(R.id.pinDot4)
+        };
+
+        int[] buttonIds = {
+                R.id.btn0, R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4,
+                R.id.btn5, R.id.btn6, R.id.btn7, R.id.btn8, R.id.btn9
+        };
+
+        List<Integer> enteredPin = new ArrayList<>();
+        final int PIN_LENGTH = 4;
+
+        for (int id : buttonIds) {
+            Button btn = enterPinView.findViewById(id);
+            btn.setOnClickListener(v -> {
+                if (enteredPin.size() < PIN_LENGTH) {
+                    enteredPin.add(Integer.parseInt(btn.getText().toString()));
+                    updatePinDots(pinDots, enteredPin.size());
+
+                    if (enteredPin.size() == PIN_LENGTH) {
+                        verifyPin(enteredPin); // Verify
                     }
-                });
+                }
+            });
+        }
+
+        ImageButton backspace = enterPinView.findViewById(R.id.btnBackspace);
+        backspace.setOnClickListener(v -> {
+            if (!enteredPin.isEmpty()) {
+                enteredPin.remove(enteredPin.size() - 1);
+                updatePinDots(pinDots, enteredPin.size());
+            }
+        });
+
+        updatePinDots(pinDots, 0);
     }
-} 
+
+    private void updatePinDots(ImageView[] pinDots, int filledCount) {
+        for (int i = 0; i < pinDots.length; i++) {
+            if (i < filledCount) {
+                pinDots[i].setImageResource(R.drawable.pin_dot_filled);
+            } else {
+                pinDots[i].setImageResource(R.drawable.pin_dot_unfilled);
+            }
+        }
+    }
+
+    private void verifyPin(List<Integer> enteredPin) {
+        StringBuilder enteredPinString = new StringBuilder();
+        for (int digit : enteredPin) {
+            enteredPinString.append(digit);
+        }
+
+        String enteredPinStr = enteredPinString.toString();
+        boolean pinExists = PinManager.doesPinExist(this);
+
+        if (pinExists) {
+            boolean isCorrect = PinManager.verifyPin(this, enteredPinStr);
+
+            if (isCorrect) {
+                Toast.makeText(this, "Welcome back!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                enteredPin.clear();
+                Toast.makeText(this, "Incorrect PIN. Please try again.", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "No PIN found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+}
