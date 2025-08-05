@@ -38,8 +38,8 @@
     <string name="nav_settings">Settings</string>
 
     <!-- home -->
-    <string name="home_title">Start your safety journey</string>
-    <string name="home_subtitle">sth sth</string>
+    <string name="home_title">Your safety journey</string>
+    <string name="home_subtitle">Complete the short questionnaire to create your personalized safety plan</string>
     <string name="start_questionnaire">Start Questionnaire</string>
     <string name="update_answers">Update Answers</string>
     <string name="view_plan">View Your Plan</string>
@@ -62,90 +62,9 @@
 
     <!-- settings -->
     <string name="settings_title">Settings</string>
-    <string name="change_pin">Change PIN</string>
-
-
-    <!-- questionnaire -->
-    <string name="questionnaire_title">Safety Assessment</string>
-    <string name="questionnaire_subtitle">Answer these questions to create your personalized safety plan</string>
-    <string name="warm_up_title">Screening Questions</string>
-    <string name="branch_specific_title">Specific Questions</string>
-    <string name="follow_up_title">Follow-Up &amp; Stabilization</string>
-    
-    <!-- Warm-Up Questions -->
-    <string name="q_relationship_status">Which best describes your situation?</string>
-    <string name="option_still_in_relationship">Still in a relationship</string>
-    <string name="option_planning_to_leave">Planning to leave</string>
-    <string name="option_post_separation">Post-separation</string>
-    
-    <string name="q_city">What city do you live in?</string>
-    
-    <string name="q_safe_room">Which room in your home feels the safest if you need to get away quickly?</string>
-    <string name="hint_safe_room">e.g. Basement, Bedroom, Laundry room</string>
-    
-    <string name="q_live_with">Who do you live with?</string>
-    <string name="option_family">Family</string>
-    <string name="option_roommates">Roommates</string>
-    <string name="option_alone">Alone</string>
-    <string name="option_partner">Partner</string>
-    
-    <string name="q_children">Do you have children?</string>
-    <string name="option_yes">Yes</string>
-    <string name="option_no">No</string>
-    <string name="hint_code_word">Enter a code word</string>
-    
-    <!-- Branch-Specific Questions -->
-    <string name="q_abuse_types">Which form(s) of abuse are you experiencing?</string>
-    <string name="option_physical_abuse">Physical</string>
-    <string name="option_emotional_abuse">Emotional</string>
-    <string name="option_financial_abuse">Financial</string>
-    <string name="option_other_abuse">Other</string>
-    
-    <string name="q_recording_incidents">Are you recording the incidents (dates, times, details)?</string>
-    
-    <string name="q_emergency_contact">Name one person you can call immediately in an emergency.</string>
-    <string name="hint_emergency_contact">e.g. mother, father, friend</string>
-    
-    <string name="q_leave_date">When do you plan to leave?</string>
-    <string name="hint_leave_date">yyyy-MM-dd</string>
-    
-    <string name="q_go_bag">Do you have a go-bag packed with essentials?</string>
-    
-    <string name="q_emergency_money">Where do you keep emergency cash or cards?</string>
-    <string name="hint_emergency_money">e.g. closet, under bed</string>
-    
-    <string name="q_safe_place">Have you identified a safe place to stay?</string>
-    <string name="hint_temp_shelter">Enter temporary shelter</string>
-    
-    <string name="q_continued_contact">Has the abuser continued any contact?</string>
-    
-    <string name="q_protection_order">Do you have a protection order? If yes, which type?</string>
-    <string name="hint_legal_order">Enter legal order type</string>
-    
-    <string name="q_safety_tools">Are you using any safety tools (cameras, door alarms)?</string>
-    <string name="hint_equipment">Enter equipment type</string>
-    
-    <!-- Follow-Up Questions -->
-    <string name="q_support_type">Which type of support would help most right now?</string>
-    <string name="option_counselling">Counselling</string>
-    <string name="option_legal_aid">Legal aid</string>
-    <string name="option_financial_guidance">Financial guidance</string>
-    <string name="option_co_parenting">Co-parenting resources</string>
-    
-    <!-- Navigation -->
-    <string name="btn_previous">Previous</string>
-    <string name="btn_next">Next</string>
-    <string name="btn_submit">Submit</string>
-
-    <!-- common -->
-    <string name="save">Save</string>
-    <string name="back">Back</string>
-    <string name="close">Close</string>
-    <string name="loading">Loading...</string>
-    <string name="error_occurred">An error occurred. Please try again.</string>
-    <string name="success">Success</string>
-    <string name="cancel">Cancel</string>
-    <string name="exit">Exit</string>
+    <string name="change_pin">Change PIN (future feature)</string>
+    <string name="delete_data">Delete all Data</string>
+    <string name="signout">Sign Out (future feature)</string>
 
 
 </resources>

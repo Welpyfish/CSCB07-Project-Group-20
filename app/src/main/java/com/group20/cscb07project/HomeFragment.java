@@ -22,6 +22,7 @@ public class HomeFragment extends Fragment {
     private TextView subtitleText;
     FloatingExitButton exitButton;
 
+    // TODO: Make update lead to non empty questionnaire
 
     @Nullable
     @Override
