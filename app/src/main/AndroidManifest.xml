@@ -36,6 +36,15 @@
         <activity
             android:name=".FirebaseActivity"
             android:exported="false" />
+        <activity
+            android:name=".SignInActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EmailAuthActivity"
+            android:exported="false" />
 
     </application>
 

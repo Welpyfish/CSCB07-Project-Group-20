@@ -24,11 +24,15 @@ public class SetPinActivity extends AppCompatActivity {
     private ImageView[] pinDots;
     private int tries;
     private StringBuilder p;
+    FloatingExitButton exitButton;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_set_pin);
+        exitButton = findViewById(R.id.exitButton);
+        setupEmergencyExit();
 
         p = new StringBuilder();
 
@@ -117,6 +121,15 @@ public class SetPinActivity extends AppCompatActivity {
         }
     }
 
+    private void setupEmergencyExit() {
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exitButton.setActivity(SetPinActivity.this);
+                exitButton.exitApp();
+            }
+        });
+    }
     private void updatePinDots() {
         for (int i = 0; i < PIN_LENGTH; i++) {
             if (i < pin.size()) {

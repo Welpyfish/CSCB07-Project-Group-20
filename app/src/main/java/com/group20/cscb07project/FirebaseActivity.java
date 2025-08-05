@@ -39,6 +39,7 @@ public class FirebaseActivity extends AppCompatActivity {
     private CredentialManager credentialManager;
     private static final String TAG = "FirebaseActivity";
 
+    // TODO: delete this ig since we have mvp
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
