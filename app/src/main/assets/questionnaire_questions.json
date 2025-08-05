@@ -1,0 +1,336 @@
+{
+  "questionnaire": {
+    "title": "Safety Assessment",
+    "sections": [
+      {
+        "id": "warm_up",
+        "title": "Screening Questions",
+        "questions": [
+          {
+            "id": "relationship_status",
+            "type": "radio",
+            "question": "Which best describes your situation?",
+            "options": [
+              {
+                "id": "still_in_relationship",
+                "text": "Still in a relationship",
+                "value": "still_in_relationship"
+              },
+              {
+                "id": "planning_to_leave",
+                "text": "Planning to leave",
+                "value": "planning_to_leave"
+              },
+              {
+                "id": "post_separation",
+                "text": "Post-separation",
+                "value": "post_separation"
+              }
+            ],
+            "required": true
+          },
+          {
+            "id": "city",
+            "type": "dropdown",
+            "question": "What city do you live in?",
+            "options": [
+              "Toronto",
+              "Vancouver",
+              "Ottawa",
+              "Edmonton"
+            ],
+            "required": true
+          },
+          {
+            "id": "safe_room",
+            "type": "text",
+            "question": "Which room in your home feels the safest if you need to get away quickly?",
+            "hint": "e.g. Basement, Bedroom, Laundry room",
+            "required": true
+          },
+          {
+            "id": "live_with",
+            "type": "radio",
+            "question": "Who do you live with?",
+            "options": [
+              {
+                "id": "family",
+                "text": "Family",
+                "value": "family"
+              },
+              {
+                "id": "roommates",
+                "text": "Roommates",
+                "value": "roommates"
+              },
+              {
+                "id": "alone",
+                "text": "Alone",
+                "value": "alone"
+              },
+              {
+                "id": "partner",
+                "text": "Partner",
+                "value": "partner"
+              }
+            ],
+            "required": true
+          },
+          {
+            "id": "children",
+            "type": "radio_with_conditional",
+            "question": "Do you have children?",
+            "options": [
+              {
+                "id": "children_yes",
+                "text": "Yes",
+                "value": "yes",
+                "conditional_field": {
+                  "id": "code_word",
+                  "type": "text",
+                  "question": "Enter a code word:",
+                  "hint": "Code word for children"
+                }
+              },
+              {
+                "id": "children_no",
+                "text": "No",
+                "value": "no"
+              }
+            ],
+            "required": true
+          }
+        ]
+      },
+      {
+        "id": "branch_specific",
+        "title": "Situational Questions",
+        "description": "Questions based on your relationship status",
+        "branches": {
+          "still_in_relationship": {
+            "questions": [
+              {
+                "id": "abuse_types",
+                "type": "checkbox",
+                "question": "Which form(s) of abuse are you experiencing?",
+                "options": [
+                  {
+                    "id": "physical_abuse",
+                    "text": "Physical",
+                    "value": "physical"
+                  },
+                  {
+                    "id": "emotional_abuse",
+                    "text": "Emotional",
+                    "value": "emotional"
+                  },
+                  {
+                    "id": "financial_abuse",
+                    "text": "Financial",
+                    "value": "financial"
+                  },
+                  {
+                    "id": "other_abuse",
+                    "text": "Other",
+                    "value": "other"
+                  }
+                ],
+                "required": true
+              },
+              {
+                "id": "recording_incidents",
+                "type": "radio",
+                "question": "Are you recording the incidents (dates, times, details)?",
+                "options": [
+                  {
+                    "id": "recording_yes",
+                    "text": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "id": "recording_no",
+                    "text": "No",
+                    "value": "no"
+                  }
+                ],
+                "required": true
+              },
+              {
+                "id": "emergency_contact",
+                "type": "text",
+                "question": "Name one person you can call immediately in an emergency.",
+                "hint": "e.g. mother, father, friend",
+                "required": true
+              }
+            ]
+          },
+          "planning_to_leave": {
+            "questions": [
+              {
+                "id": "leave_date",
+                "type": "date",
+                "question": "When do you plan to leave?",
+                "hint": "yyyy-MM-dd",
+                "required": true
+              },
+              {
+                "id": "go_bag",
+                "type": "radio",
+                "question": "Do you have a go-bag packed with essentials?",
+                "options": [
+                  {
+                    "id": "go_bag_yes",
+                    "text": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "id": "go_bag_no",
+                    "text": "No",
+                    "value": "no"
+                  }
+                ],
+                "required": true
+              },
+              {
+                "id": "emergency_money",
+                "type": "text",
+                "question": "Where do you keep emergency cash or cards?",
+                "hint": "e.g. closet, under bed",
+                "required": true
+              },
+              {
+                "id": "safe_place",
+                "type": "radio_with_conditional",
+                "question": "Have you identified a safe place to stay?",
+                "options": [
+                  {
+                    "id": "safe_place_yes",
+                    "text": "Yes",
+                    "value": "yes",
+                    "conditional_field": {
+                      "id": "temp_shelter",
+                      "type": "text",
+                      "question": "Enter a temporary shelter:",
+                      "hint": "Temporary shelter name"
+                    }
+                  },
+                  {
+                    "id": "safe_place_no",
+                    "text": "No",
+                    "value": "no"
+                  }
+                ],
+                "required": true
+              }
+            ]
+          },
+          "post_separation": {
+            "questions": [
+              {
+                "id": "continued_contact",
+                "type": "radio",
+                "question": "Has the abuser continued any contact?",
+                "options": [
+                  {
+                    "id": "continued_contact_yes",
+                    "text": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "id": "continued_contact_no",
+                    "text": "No",
+                    "value": "no"
+                  }
+                ],
+                "required": true
+              },
+              {
+                "id": "protection_order",
+                "type": "radio_with_conditional",
+                "question": "Do you have a protection order? If yes, which type?",
+                "options": [
+                  {
+                    "id": "protection_order_yes",
+                    "text": "Yes",
+                    "value": "yes",
+                    "conditional_field": {
+                      "id": "legal_order",
+                      "type": "text",
+                      "question": "Enter a legal order:",
+                      "hint": "Legal order type"
+                    }
+                  },
+                  {
+                    "id": "protection_order_no",
+                    "text": "No",
+                    "value": "no"
+                  }
+                ],
+                "required": true
+              },
+              {
+                "id": "safety_tools",
+                "type": "radio_with_conditional",
+                "question": "Are you using any safety tools (cameras, door alarms)?",
+                "options": [
+                  {
+                    "id": "safety_tools_yes",
+                    "text": "Yes",
+                    "value": "yes",
+                    "conditional_field": {
+                      "id": "equipment",
+                      "type": "text",
+                      "question": "Enter an equipment:",
+                      "hint": "Equipment type"
+                    }
+                  },
+                  {
+                    "id": "safety_tools_no",
+                    "text": "No",
+                    "value": "no"
+                  }
+                ],
+                "required": true
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "follow_up",
+        "title": "Follow-Up & Stabilization",
+        "description": "Support resources and next steps",
+        "questions": [
+          {
+            "id": "support_type",
+            "type": "radio",
+            "question": "Which type of support would help most right now?",
+            "options": [
+              {
+                "id": "counselling",
+                "text": "Counselling",
+                "value": "counselling"
+              },
+              {
+                "id": "legal_aid",
+                "text": "Legal aid",
+                "value": "legal_aid"
+              },
+              {
+                "id": "financial_guidance",
+                "text": "Financial guidance",
+                "value": "financial_guidance"
+              },
+              {
+                "id": "co_parenting",
+                "text": "Co-parenting resources",
+                "value": "co_parenting"
+              }
+            ],
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -15,6 +15,8 @@ public class SafetyPlanFragment extends Fragment {
     private TextView titleText;
     private TextView subtitleText;
 
+    // TODO: Implement dynamic safety plan
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

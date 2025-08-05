@@ -65,10 +65,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:minHeight="112dp"
+                    android:minHeight="150dp"
                     android:text="@string/start_questionnaire"
                     app:backgroundTint="@color/darkGreen"
-                    android:textSize="28sp"
+                    android:textSize="30sp"
                     app:cornerRadius="8dp" />
 
                 <!-- Update Answers Button -->
@@ -80,7 +80,7 @@
                     android:layout_marginBottom="16dp"
                     android:minHeight="56dp"
                     android:text="@string/update_answers"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textColor="@color/darkGreen"
                     app:cornerRadius="8dp"
                     app:icon="@drawable/ic_settings"
@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:minHeight="56dp"
                     android:text="@string/view_plan"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textColor="@color/darkGreen"
                     app:cornerRadius="8dp"
                     app:icon="@drawable/ic_documents"

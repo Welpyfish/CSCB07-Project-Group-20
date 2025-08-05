@@ -51,6 +51,34 @@
                 app:iconGravity="textStart"
                 app:iconPadding="8dp" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/delete_all_data"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:minHeight="56dp"
+                android:text="@string/delete_data"
+                android:textSize="16sp"
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_delete"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/sign_out"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:minHeight="56dp"
+                android:text="@string/signout"
+                android:textSize="16sp"
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_exit"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp" />
+
 
 
 
