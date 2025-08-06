@@ -1,4 +1,4 @@
-package com.group20.cscb07project;
+package com.group20.cscb07project.EmergencyInfo;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.group20.cscb07project.R;
 
 public class LocationsListFragment extends Fragment {
 
@@ -27,10 +28,8 @@ public class LocationsListFragment extends Fragment {
         addLocationFab = view.findViewById(R.id.add_location);
 
         locationsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        // TODO: Set adapter when LocationAdapter is created
 
         addLocationFab.setOnClickListener(v -> {
-            // TODO: Navigate to add/edit location fragment
         });
 
         return view;

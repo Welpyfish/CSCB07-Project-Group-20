@@ -1,4 +1,4 @@
-package com.group20.cscb07project;
+package com.group20.cscb07project.EmergencyInfo;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.group20.cscb07project.R;
 
 public class AddEditMedicationFragment extends Fragment {
 

@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:text="Enter your PIN"
+        android:text="@string/enter_pin"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -103,4 +103,4 @@
             android:scaleY="1.2"/>
     </GridLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout> 
+</androidx.constraintlayout.widget.ConstraintLayout>
