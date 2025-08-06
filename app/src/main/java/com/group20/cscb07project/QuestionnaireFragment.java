@@ -1,6 +1,8 @@
 package com.group20.cscb07project;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,8 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.group20.cscb07project.question.TextQuestion;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +37,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class QuestionnaireFragment extends Fragment {
 
@@ -66,6 +71,8 @@ public class QuestionnaireFragment extends Fragment {
         mainContainer.setPadding(96, 96, 96, 96);
 
         scrollView.addView(mainContainer);
+
+        FirebaseDB.getInstance().setPath("/users/"+ Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()+"/");
 
         loadQuestionnaireData();
         buildQuestionnaireFromJSON();
@@ -241,18 +248,15 @@ public class QuestionnaireFragment extends Fragment {
         questionTextView.setPadding(0, 0, 0, 32);
         container.addView(questionTextView);
 
-        if (questionType.equals("radio")) {
-            buildRadioGroup(question, container);
-        } else if (questionType.equals("radio_with_conditional")) {
-            buildRadioGroupWithConditional(question, container);
-        } else if (questionType.equals("dropdown")) {
-            buildDropdown(question, container);
-        } else if (questionType.equals("text")) {
-            buildTextInput(question, container);
-        } else if (questionType.equals("checkbox")) {
-            buildCheckboxGroup(question, container);
-        } else if (questionType.equals("date")) {
-            buildDateInput(question, container);
+
+        switch (questionType) {
+            case "radio" -> buildRadioGroup(question, container);
+            case "radio_with_conditional" -> buildRadioGroupWithConditional(question, container);
+            case "dropdown" -> buildDropdown(question, container);
+//            case "text" -> buildTextInput(question, container);
+            case "text" -> container.addView(new TextQuestion(getContext(), question).getView());
+            case "checkbox" -> buildCheckboxGroup(question, container);
+            case "date" -> buildDateInput(question, container);
         }
 
         addQuestionSpacing(container);
@@ -386,6 +390,49 @@ public class QuestionnaireFragment extends Fragment {
         textInputLayout.addView(editText);
 
         container.addView(textInputLayout);
+
+//        editText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                try {
+//                    FirebaseDB.getInstance().setValue(question.getString("id"), editable.toString(), new FirebaseResultCallback() {
+//                        @Override
+//                        public void onSuccess() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onFailure() {
+//
+//                        }
+//                    });
+//                } catch (JSONException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        });
+//
+//        FirebaseDB.getInstance().addListener(question.getString("id"), new FirebaseResultCallback() {
+//            @Override
+//            public void onSuccess() {
+//                editText.setText();
+//            }
+//
+//            @Override
+//            public void onFailure() {
+//
+//            }
+//        });
     }
 
     private void buildCheckboxGroup(JSONObject question, LinearLayout container) throws JSONException {

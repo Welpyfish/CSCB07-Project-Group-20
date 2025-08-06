@@ -25,7 +25,6 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.concurrent.Executors;
@@ -43,7 +42,7 @@ public class FirebaseAuthModel {
         return mAuth.getCurrentUser()!=null;
     }
 
-    public void createAccountEmailPassword(String email, String password, AuthResultCallback callback){
+    public void createAccountEmailPassword(String email, String password, FirebaseResultCallback callback){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -59,7 +58,7 @@ public class FirebaseAuthModel {
                 });
     }
 
-    public void signInEmailPassword(String email, String password, AuthResultCallback callback){
+    public void signInEmailPassword(String email, String password, FirebaseResultCallback callback){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -76,7 +75,7 @@ public class FirebaseAuthModel {
     }
 
 
-    public void signInG(Context context, AuthResultCallback callback){
+    public void signInG(Context context, FirebaseResultCallback callback){
         // Instantiate a Google sign-in request
         GetGoogleIdOption googleIdOption = new GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)
@@ -105,7 +104,7 @@ public class FirebaseAuthModel {
                 } );
     }
 
-    private void handleSignInG(Credential credential, AuthResultCallback callback) {
+    private void handleSignInG(Credential credential, FirebaseResultCallback callback) {
         // Check if credential is of type Google ID
         if (credential instanceof CustomCredential) {
             CustomCredential customCredential = (CustomCredential) credential;
@@ -123,7 +122,7 @@ public class FirebaseAuthModel {
         }
     }
 
-    private void firebaseAuthWithGoogle(String idToken, AuthResultCallback callback) {
+    private void firebaseAuthWithGoogle(String idToken, FirebaseResultCallback callback) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
@@ -136,7 +135,7 @@ public class FirebaseAuthModel {
     }
 
 
-    public void signOut(Context context, AuthResultCallback callback) {
+    public void signOut(Context context, FirebaseResultCallback callback) {
         // Firebase sign out
         mAuth.signOut();
 

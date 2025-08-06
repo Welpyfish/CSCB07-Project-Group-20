@@ -1,10 +1,6 @@
 package com.group20.cscb07project;
 
 
-import android.util.Log;
-
-import com.google.firebase.auth.FirebaseUser;
-
 public class FirebaseAuthPresenter {
 
 
@@ -25,7 +21,7 @@ public class FirebaseAuthPresenter {
             return;
         }
         //validate email/pw first
-        model.createAccountEmailPassword(email, password, new AuthResultCallback(){
+        model.createAccountEmailPassword(email, password, new FirebaseResultCallback(){
             @Override
             public void onSuccess() {
                 view.loginAccepted();
@@ -44,7 +40,7 @@ public class FirebaseAuthPresenter {
             view.notifyError("invalid email");
             return;
         }
-        model.signInEmailPassword(email, password, new AuthResultCallback() {
+        model.signInEmailPassword(email, password, new FirebaseResultCallback() {
             @Override
             public void onSuccess() {
                 view.loginAccepted();
@@ -59,7 +55,7 @@ public class FirebaseAuthPresenter {
 
 
     public void signInG() {
-        model.signInG(view, new AuthResultCallback() {
+        model.signInG(view, new FirebaseResultCallback() {
             @Override
             public void onSuccess() {
                 view.loginAccepted();
@@ -74,7 +70,7 @@ public class FirebaseAuthPresenter {
 
 
     public void signOut() {
-        model.signOut(view, new AuthResultCallback() {
+        model.signOut(view, new FirebaseResultCallback() {
             @Override
             public void onSuccess() {
                 view.reset();
