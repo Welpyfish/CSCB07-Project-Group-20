@@ -73,8 +73,31 @@
     <!-- settings -->
     <string name="settings_title">Settings</string>
     <string name="change_pin">Change PIN (future feature)</string>
-    <string name="delete_data">Delete all Data</string>
+    <string name="delete_data">Delete all Data (future feature)</string>
     <string name="signout">Sign Out (future feature)</string>
 
+    <!-- emergency info -->
+
+    <string name="add_edit_contact">Add/Edit Contact</string>
+    <string name="add_edit_location">Add/Edit Location</string>
+    <string name="add_edit_medication">Add/Edit Medication</string>
+    <string name="contact_name">Contact Name</string>
+    <string name="relationship">Relationship</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="address">Address</string>
+    <string name="notes">Notes</string>
+    <string name="medication_name">Medication Name</string>
+    <string name="dosage">Dosage</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_contact">Add Contact</string>
+    <string name="add_location">Add Location</string>
+    <string name="add_medication">Add Medication</string>
+    <string name="edit_contact">Edit Contact</string>
+    <string name="edit_location">Edit Location</string>
+    <string name="edit_medication">Edit Medication</string>
+    <string name="delete_contact">Delete Contact</string>
+    <string name="delete_location">Delete Location</string>
+    <string name="delete_medication">Delete Medication</string>
 
 </resources>
