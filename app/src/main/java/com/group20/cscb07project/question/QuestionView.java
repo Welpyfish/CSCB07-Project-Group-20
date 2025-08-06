@@ -12,8 +12,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.group20.cscb07project.FirebaseDB;
 import com.group20.cscb07project.FirebaseResultCallback;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public abstract class QuestionView {
     View view;
@@ -21,6 +25,7 @@ public abstract class QuestionView {
     private String value;
 
     JSONObject question;
+    BiConsumer<String, Boolean> callback;
 
     public QuestionView(Context context, JSONObject question){
         this.question = question;
@@ -48,6 +53,14 @@ public abstract class QuestionView {
         }
     }
 
+    JSONArray getQuestionOptions(String key){
+        try {
+            return question.getJSONArray(key);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     abstract View createView(Context context);
     abstract void addListener();
 
@@ -70,9 +83,15 @@ public abstract class QuestionView {
     }
 
     public void setValue(String value){
-        this.value = value;
-        updateDB();
+        if(value!= null && !value.equals(this.value)){
+            this.value = value;
+            updateDB();
+        }
     }
 
     public abstract void updateUI(String value);
+
+    public void setCallback(BiConsumer<String, Boolean> callback){
+        this.callback = callback;
+    }
 }
