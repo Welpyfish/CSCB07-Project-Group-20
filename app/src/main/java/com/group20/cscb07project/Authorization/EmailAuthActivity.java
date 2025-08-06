@@ -1,8 +1,7 @@
-package com.group20.cscb07project;
+package com.group20.cscb07project.Authorization;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.group20.cscb07project.R;
 
 
 public class EmailAuthActivity extends AppCompatActivity {

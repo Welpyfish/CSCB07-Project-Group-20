@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/ScreenStyle">
 
-    <!-- Title -->
     <TextView
         android:id="@+id/enterPinTextView"
         android:layout_width="wrap_content"
@@ -18,7 +17,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/pinIndicatorLayout" />
 
-    <!-- PIN Indicator (4 dots) -->
     <LinearLayout
         android:id="@+id/pinIndicatorLayout"
         android:layout_width="wrap_content"
@@ -102,5 +100,20 @@
             android:scaleX="1.2"
             android:scaleY="1.2"/>
     </GridLayout>
+
+    <com.group20.cscb07project.FloatingExitButton
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/emergency_exit"
+        android:src="@drawable/ic_exit"
+        app:backgroundTint="@color/darkRed"
+        app:tint="@color/white"
+        app:fabSize="mini"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

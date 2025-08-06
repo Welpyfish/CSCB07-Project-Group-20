@@ -25,25 +25,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SetPinActivity"
+            android:name=".Authorization.SetPinActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".Authorization.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".AuthenActivity"
+            android:name=".Authorization.AuthenActivity"
             android:exported="false" />
         <activity
-            android:name=".FirebaseActivity"
+            android:name=".Authorization.FirebaseActivity"
             android:exported="false" />
         <activity
-            android:name=".SignInActivity"
+            android:name=".Authorization.SignInActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".Authorization.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".EmailAuthActivity"
+            android:name=".Authorization.EmailAuthActivity"
             android:exported="false" />
 
     </application>

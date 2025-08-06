@@ -1,7 +1,6 @@
-package com.group20.cscb07project;
+package com.group20.cscb07project.Authorization;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,8 +13,10 @@ import java.util.List;
 
 import android.widget.TextView;
 import android.widget.Toast;
-import com.group20.cscb07project.PinManager;
 
+import com.group20.cscb07project.FloatingExitButton;
+import com.group20.cscb07project.MainActivity;
+import com.group20.cscb07project.R;
 
 
 public class SetPinActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.group20.cscb07project;
+package com.group20.cscb07project.Authorization;
 import android.content.Context;
 import android.content.SharedPreferences;
 
