@@ -30,6 +30,7 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.group20.cscb07project.question.CheckboxQuestion;
 import com.group20.cscb07project.question.DropdownQuestion;
 import com.group20.cscb07project.question.RadioGroupQuestion;
 import com.group20.cscb07project.question.TextQuestion;
@@ -307,13 +308,7 @@ public class QuestionnaireFragment extends Fragment {
         JSONArray options = question.getJSONArray("options");
         for (int i = 0; i < options.length(); i++) {
             JSONObject option = options.getJSONObject(i);
-            CheckBox checkBox = new CheckBox(getContext());
-            checkBox.setText(option.getString("text"));
-            checkBox.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ));
-            container.addView(checkBox);
+            container.addView(new CheckboxQuestion(getContext(), option).getView());
         }
     }
 
