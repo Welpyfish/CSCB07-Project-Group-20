@@ -93,6 +93,8 @@ public class LoginActivity extends AppCompatActivity {
                     .setAvailableProviders(providers)
                     .build();
             signInLauncher.launch(signInIntent);
+        });
+    }
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();

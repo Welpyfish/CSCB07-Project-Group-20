@@ -98,7 +98,7 @@ public class QuestionnaireFragment extends Fragment {
             byte[] buffer = new byte[size];
             inputStream.read(buffer);
             inputStream.close();
-            
+
             String jsonString = new String(buffer, StandardCharsets.UTF_8);
             questionnaireData = new JSONObject(jsonString);
         } catch (IOException | JSONException e) {
@@ -116,7 +116,7 @@ public class QuestionnaireFragment extends Fragment {
             for (int i = 0; i < sections.length(); i++) {
                 JSONObject section = sections.getJSONObject(i);
                 String sectionId = section.getString("id");
-                
+
                 if (sectionId.equals("warm_up")) {
                     buildWarmUpSection(section);
                 } else if (sectionId.equals("branch_specific")) {
@@ -161,7 +161,7 @@ public class QuestionnaireFragment extends Fragment {
         MaterialCardView card = createSectionCard();
         LinearLayout cardContent = createCardContent();
         addSectionTitle(section.getString("title"), cardContent);
-        
+
         JSONArray questions = section.getJSONArray("questions");
         for (int i = 0; i < questions.length(); i++) {
             JSONObject question = questions.getJSONObject(i);
@@ -176,7 +176,7 @@ public class QuestionnaireFragment extends Fragment {
         MaterialCardView card = createSectionCard();
         LinearLayout cardContent = createCardContent();
         addSectionTitle(section.getString("title"), cardContent);
-        
+
         branchContainer = new LinearLayout(getContext());
         branchContainer.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -194,7 +194,7 @@ public class QuestionnaireFragment extends Fragment {
         MaterialCardView card = createSectionCard();
         LinearLayout cardContent = createCardContent();
         addSectionTitle(section.getString("title"), cardContent);
-        
+
         JSONArray questions = section.getJSONArray("questions");
         for (int i = 0; i < questions.length(); i++) {
             JSONObject question = questions.getJSONObject(i);
@@ -464,7 +464,7 @@ public class QuestionnaireFragment extends Fragment {
 
         submitButton.setOnClickListener(v -> {
             collectAllResponses();
-            
+
             boolean allAnswered = true;
             for (QuestionView questionView : allQuestionViews) {
                 String value = questionView.getCurrentValue();
@@ -476,15 +476,15 @@ public class QuestionnaireFragment extends Fragment {
                     }
                 }
             }
-            
+
             if (allAnswered) {
                 Toast.makeText(getContext(), "Responses recorded", Toast.LENGTH_SHORT).show();
-                
+
                 if (getActivity() != null) {
                     getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new SafetyPlanFragment())
-                        .addToBackStack(null)
-                        .commit();
+                            .replace(R.id.fragment_container, new SafetyPlanFragment())
+                            .addToBackStack(null)
+                            .commit();
                 }
             }
         });
@@ -548,4 +548,4 @@ public class QuestionnaireFragment extends Fragment {
             });
         }
     }
-} 
+}
