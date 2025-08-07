@@ -167,7 +167,7 @@
           "planning_to_leave": {
             "questions": [
               {
-                "id": "leave_date",
+                "id": "leave_timing",
                 "type": "date",
                 "question": "When do you plan to leave?",
                 "hint": "yyyy-MM-dd",
@@ -192,7 +192,7 @@
                 "required": true
               },
               {
-                "id": "emergency_money",
+                "id": "money_location",
                 "type": "text",
                 "question": "Where do you keep emergency cash or cards?",
                 "hint": "e.g. closet, under bed",
@@ -336,7 +336,7 @@
   "tips": {
     "relationship_status": {
       "Still in a relationship": "Keep this plan updated, and remember you can always reach out if things escalate.",
-      "Planning to Leave": "Start packing small items now so you're ready when you decide to leave.",
+      "Planning to leave": "Start packing small items now so you're ready when you decide to leave.",
       "Post-separation": "It's normal to feel unsettled, refer back to this plan whenever you need a safety reminder."
     },
     "city": "Save the local support numbers for {city} in your phone's speed-dial so you can call immediately if you need help.",
@@ -357,12 +357,12 @@
       "No": "Even brief notes on your phone can be helpful. Start logging today."
     },
     "emergency_contact": "Save {contact_name} in your phone under a code-word so you can quietly call them when you need help.",
-    "leave_date": "Set a real target {leave_timing} and pack one essential item each day until you're ready.",
+    "leave_timing": "Set a real target {leave_timing} and pack one essential item each day until you're ready.",
     "go_bag": {
       "Yes": "Great! Keep your go-bag in a hidden spot so you can grab it quickly.",
       "No": "Pack a simple go-bag today with essentials like your ID, some cash, and a charger."
     },
-    "emergency_money": "Stash some cash and a spare card in {money_location}, a spot your partner won't suspect.",
+    "money_location": "Stash some cash and a spare card in {money_location}, a spot your partner won't suspect.",
     "safe_place": {
       "Yes": "Make sure {temp_shelter} knows you may arrive unexpectedly and how to contact you.",
       "No": "Reach out to Victim Services Toronto or a trusted friend now to secure a shelter option before you leave."
