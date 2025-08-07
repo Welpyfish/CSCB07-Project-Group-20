@@ -10,7 +10,7 @@ public class SignUpPresenter {
 
     private final SignUpView view;
     private final FirebaseAuthModel model;
-    private static final String TAG = "SignUpPresenter";
+
     private boolean pinExists;
 
     public SignUpPresenter(SignUpView view, FirebaseAuthModel model, boolean pinExists) {
@@ -48,7 +48,7 @@ public class SignUpPresenter {
         model.signUp(email, password, new FirebaseResultCallback() {
             @Override
             public void onSuccess() {
-                Log.d(TAG, "createUserWithEmail:success");
+                view.logSuccess();
                 view.hideProgress();
                 view.showToast("Account created successfully!");
                 if(pinExists){
@@ -60,7 +60,7 @@ public class SignUpPresenter {
 
             @Override
             public void onFailure(Exception e) {
-                Log.w(TAG, "createUserWithEmail:failure", e);
+                view.logFailure(e);
                 view.hideProgress();
 
                 String errorMessage = "Authentication failed.";

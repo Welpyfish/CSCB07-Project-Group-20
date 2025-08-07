@@ -2,6 +2,7 @@ package com.group20.cscb07project.Authorization;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,8 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
     private FloatingExitButton exitButton;
 
     private SignInPresenter presenter;
+
+    private static final String TAG = "SignInPresenter";
 
     private PinManager pinManager;
 
@@ -96,5 +99,15 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
     @Override
     public String getPassword() {
         return passwordEditText.getText().toString().trim();
+    }
+
+    @Override
+    public void logFailure(Exception e){
+        Log.w(TAG, "signInWithEmail:failure", e);
+    }
+
+    @Override
+    public void logSuccess(){
+        Log.d(TAG, "signInWithEmail:success");
     }
 }

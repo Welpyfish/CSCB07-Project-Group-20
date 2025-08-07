@@ -11,7 +11,6 @@ public class SignInPresenter {
     private final SignInView view;
     private final FirebaseAuthModel model;
     private final String email;
-    private static final String TAG = "SignInPresenter";
 
     private boolean pinExists;
 
@@ -25,7 +24,7 @@ public class SignInPresenter {
     public void signIn() {
         String password = view.getPassword();
 
-        if (TextUtils.isEmpty(password)) {
+        if (password.isEmpty()) {
             view.showPasswordError("Password is required");
             return;
         }
@@ -36,7 +35,7 @@ public class SignInPresenter {
         model.signIn(email, password, new FirebaseResultCallback() {
             @Override
             public void onSuccess() {
-                Log.d(TAG, "signInWithEmail:success");
+                view.logSuccess();
                 view.hideProgress();
                 if(pinExists){
                     view.navigateToMain();
@@ -47,7 +46,7 @@ public class SignInPresenter {
 
             @Override
             public void onFailure(Exception e) {
-                Log.w(TAG, "signInWithEmail:failure", e);
+                view.logFailure(e);
                 view.hideProgress();
                 view.showAuthFailed("Authentication failed");
             }

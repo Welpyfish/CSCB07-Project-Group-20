@@ -1,6 +1,9 @@
 package com.group20.cscb07project.Authorization;
 
 public interface SignUpView {
+
+    void logFailure(Exception e);
+    void logSuccess();
     void showProgress();
     void hideProgress();
     void showEmailError(String message);

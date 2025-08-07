@@ -16,4 +16,7 @@ public interface SignInView {
     void showAuthFailed(String message);
 
     String getPassword();
+
+    void logFailure(Exception e);
+    void logSuccess();
 }
