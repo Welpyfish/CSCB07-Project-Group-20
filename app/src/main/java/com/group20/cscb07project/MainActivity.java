@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db = FirebaseDatabase.getInstance("https://b07-demo-summer-2024-default-rtdb.firebaseio.com/");
+        db = FirebaseDatabase.getInstance("https://cscb07-project-group-20-default-rtdb.firebaseio.com/");
         auth = FirebaseAuth.getInstance();
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
