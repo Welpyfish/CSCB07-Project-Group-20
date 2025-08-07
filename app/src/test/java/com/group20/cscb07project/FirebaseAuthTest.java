@@ -1,6 +1,7 @@
-package com.example.b07demosummer2024;
+package com.group20.cscb07project;
 
 import org.junit.Test;
+import org.mockito.Mock;
 
 import static org.junit.Assert.*;
 
@@ -9,9 +10,17 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class FirebaseAuthTest {
+    @Mock
+    FirebaseAuthPresenter presenter;
+
     @Test
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void testEmailPasswordCreation(){
+
     }
 }

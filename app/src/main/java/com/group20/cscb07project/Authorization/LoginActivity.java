@@ -21,6 +21,7 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
@@ -44,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
     );
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,8 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                     .setAvailableProviders(providers)
                     .build();
             signInLauncher.launch(signInIntent);
-        });
-    }
+
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
@@ -143,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (enteredPin.size() < PIN_LENGTH) {
                     enteredPin.add(Integer.parseInt(btn.getText().toString()));
                     updatePinDots(pinDots, enteredPin.size());
-                    
+
                     if (enteredPin.size() == PIN_LENGTH) {
                         verifyPin(enteredPin); // Verify
                     }
@@ -177,13 +179,13 @@ public class LoginActivity extends AppCompatActivity {
         for (int digit : enteredPin) {
             enteredPinString.append(digit);
         }
-        
+
         String enteredPinStr = enteredPinString.toString();
         boolean pinExists = PinManager.doesPinExist(this);
-        
+
         if (pinExists) {
             boolean isCorrect = PinManager.verifyPin(this, enteredPinStr);
-            
+
             if (isCorrect) {
                 Toast.makeText(this, "Welcome back!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -207,4 +209,4 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-} 
+}

@@ -28,6 +28,8 @@ public class SetPinActivity extends AppCompatActivity {
     FloatingExitButton exitButton;
 
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
