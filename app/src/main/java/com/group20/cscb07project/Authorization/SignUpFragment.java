@@ -2,9 +2,11 @@ package com.group20.cscb07project.Authorization;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -13,7 +15,7 @@ import com.group20.cscb07project.MainActivity;
 import com.group20.cscb07project.R;
 
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpFragment extends Fragment {
 
     private TextInputEditText emailEditText;
     private TextInputEditText nameEditText;
@@ -23,32 +25,39 @@ public class SignUpActivity extends AppCompatActivity {
     private TextInputLayout newPasswordLayout;
     private MaterialButton signUpButton;
 
+    private FirebaseAuthPresenter presenter;
+
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_sign_up, container, false);
+        initializeViews(view);
 
         // TODO: Initialize Firebase Auth here
 
-        initializeViews();
+        initializeViews(view);
         setupClickListeners();
-        
+
         // Pre-fill email
-        String email = getIntent().getStringExtra("email");
-        if (email != null && !email.isEmpty()) {
-            emailEditText.setText(email);
+        Bundle args = getArguments();
+        if (args != null) {
+            String email = args.getString("email");
+            if (email != null && !email.isEmpty()) {
+                emailEditText.setText(email);
+            }
+
         }
+        return view;
     }
 
-    private void initializeViews() {
-        emailEditText = findViewById(R.id.email_edit_text);
-        nameEditText = findViewById(R.id.name_edit_text);
-        newPasswordEditText = findViewById(R.id.new_password_edit_text);
-        emailLayout = findViewById(R.id.email_layout);
-        nameLayout = findViewById(R.id.name_layout);
-        newPasswordLayout = findViewById(R.id.new_password_layout);
-        signUpButton = findViewById(R.id.sign_in_button); // This is actually the sign up button
+    private void initializeViews(View view) {
+        emailEditText = view.findViewById(R.id.email_edit_text);
+        nameEditText = view.findViewById(R.id.name_edit_text);
+        newPasswordEditText = view.findViewById(R.id.new_password_edit_text);
+        emailLayout = view.findViewById(R.id.email_layout);
+        nameLayout = view.findViewById(R.id.name_layout);
+        newPasswordLayout = view.findViewById(R.id.new_password_layout);
+        signUpButton = view.findViewById(R.id.sign_in_button); // This is actually the sign up button
     }
 
     private void setupClickListeners() {
@@ -82,14 +91,11 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setEnabled(false);
         signUpButton.setText("Creating account...");
 
-        // TODO: Implement Firebase user creation with email and password
-        // TODO: Update user profile with display name
-        // TODO: Handle success - navigate to MainActivity
-        // TODO: Handle failure - show appropriate error messages
-        
-        // For now, just show success message and navigate
-        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        presenter.createAccountEP(email, password);
+
     }
-} 
+
+    public void setPresenter(FirebaseAuthPresenter presenter) {
+        this.presenter = presenter;
+    }
+}

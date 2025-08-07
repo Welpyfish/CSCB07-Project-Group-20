@@ -5,6 +5,8 @@ import org.mockito.Mock;
 
 import static org.junit.Assert.*;
 
+import com.group20.cscb07project.Authorization.FirebaseAuthPresenter;
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
