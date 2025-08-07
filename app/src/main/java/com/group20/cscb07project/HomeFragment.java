@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,30 +22,30 @@ public class HomeFragment extends Fragment {
     private TextView titleText;
     private TextView subtitleText;
 
-    // TODO: Make update lead to non empty questionnaire
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // Initialize views
         titleText = view.findViewById(R.id.home_title);
         subtitleText = view.findViewById(R.id.home_subtitle);
         startQuestionnaireButton = view.findViewById(R.id.start_questionnaire_button);
         updateAnswersButton = view.findViewById(R.id.update_answers_button);
         viewPlanButton = view.findViewById(R.id.view_plan_button);
 
-        // Set text
         titleText.setText(R.string.home_title);
         subtitleText.setText(R.string.home_subtitle);
         startQuestionnaireButton.setText(R.string.start_questionnaire);
         updateAnswersButton.setText(R.string.update_answers);
         viewPlanButton.setText(R.string.view_plan);
 
-        // Setup click listeners
-        startQuestionnaireButton.setOnClickListener(v -> loadFragment(new QuestionnaireFragment()));
-        updateAnswersButton.setOnClickListener(v -> loadFragment(new QuestionnaireFragment()));
+        startQuestionnaireButton.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Future Feature: Always shows empty questionnaire", Toast.LENGTH_LONG).show();
+            loadFragment(new QuestionnaireFragment());
+        });
+        updateAnswersButton.setOnClickListener(v -> {
+            loadFragment(new QuestionnaireFragment());
+        });
         viewPlanButton.setOnClickListener(v -> loadFragment(new SafetyPlanFragment()));
 
         return view;

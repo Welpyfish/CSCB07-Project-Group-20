@@ -386,6 +386,17 @@ public class QuestionnaireFragment extends Fragment {
     }
 
     private void collectAllResponses() {
-        userResponses.put("branch", currentBranch);
+
+        if (currentBranch != null) {
+            FirebaseDB.getInstance().setValue("branch", currentBranch, new FirebaseResultCallback() {
+                @Override
+                public void onSuccess() {
+                }
+
+                @Override
+                public void onFailure() {
+                }
+            });
+        }
     }
 } 

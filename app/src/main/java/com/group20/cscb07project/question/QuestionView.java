@@ -68,7 +68,7 @@ public abstract class QuestionView {
         FirebaseDB.getInstance().setValue(questionId, value, new FirebaseResultCallback() {
             @Override
             public void onSuccess() {
-                Toast.makeText(view.getContext(), "Response recorded", Toast.LENGTH_SHORT).show();
+                // Success - no toast to avoid spamming
             }
 
             @Override
