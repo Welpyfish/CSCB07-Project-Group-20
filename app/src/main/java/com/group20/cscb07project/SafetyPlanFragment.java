@@ -128,7 +128,7 @@ public class SafetyPlanFragment extends Fragment {
 
             Map<String, List<String>> branchQuestions = new HashMap<>();
             branchQuestions.put("still_in_relationship", Arrays.asList("abuse_types", "recording_incidents", "emergency_contact"));
-            branchQuestions.put("planning_to_leave", Arrays.asList("leave_date", "go_bag", "emergency_money", "safe_place"));
+            branchQuestions.put("planning_to_leave", Arrays.asList("leave_timing", "go_bag", "money_location", "safe_place"));
             branchQuestions.put("post_separation", Arrays.asList("continued_contact", "protection_order", "safety_tools"));
 
             List<String> relevantQuestions = branchQuestions.getOrDefault(currentBranch, new ArrayList<>());
@@ -145,8 +145,15 @@ public class SafetyPlanFragment extends Fragment {
 
                 // Only process tips for relevant questions
                 if (!combinedRelevantQuestions.contains(questionId)) {
+                    Log.d("TipDebug", "Skipping irrelevant questionId: " + questionId);
                     continue;
                 }
+
+                Log.d("TipDebug", "Processing questionId: " + questionId + ", response: " + userResponses.get(questionId));
+                if (tipsData.has(questionId)) {
+                    Log.d("TipDebug", "Found tip for questionId: " + questionId);
+                }
+
 
                 if (tipsData.has(questionId)) {
                     String response = userResponses.get(questionId);
@@ -166,6 +173,10 @@ public class SafetyPlanFragment extends Fragment {
                         tipContent = replaceAllPlaceholders(tipContent);
                         newTips.add(new TipAdapter.Tip(tipContent, questionId));
                     }
+                    else {
+                        Log.d("TipDebug", "No tipContent found for: " + questionId + " with response: " + response);
+                    }
+
                 }
             }
 
