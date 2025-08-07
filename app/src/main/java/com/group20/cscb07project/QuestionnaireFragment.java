@@ -1,5 +1,6 @@
 package com.group20.cscb07project;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -265,13 +266,11 @@ public class QuestionnaireFragment extends Fragment {
             case "radio" -> {
                 RadioGroupQuestion radioGroupQuestion = new RadioGroupQuestion(getContext(), question);
                 questionView = radioGroupQuestion;
-                //branch refers to the option that called this
                 radioGroupQuestion.setCallback((branch, isChecked) -> {
                     if(isChecked) {
                         currentBranch = branch;
                         updateBranchSpecificQuestions(branch);
-                    }else{
-                        //delete all db data under branch. loop over the questions and then delete them
+                    } else {
                     }
                 });
                 container.addView(radioGroupQuestion.getView());
@@ -283,19 +282,26 @@ public class QuestionnaireFragment extends Fragment {
                 for (int i = 0; i < options.length(); i++) {
                     JSONObject option = options.getJSONObject(i);
                     if(option.has("conditional_field")){
-                        TextQuestion conditionalQuestion = new TextQuestion(getContext(), option.getJSONObject("conditional_field"));
+                        JSONObject conditionalField = option.getJSONObject("conditional_field");
+                        TextQuestion conditionalQuestion = new TextQuestion(getContext(), conditionalField);
                         conditionalQuestion.getView().setVisibility(View.GONE);
+                        boolean isConditionalRequired = conditionalField.optBoolean("required", true);
                         radioGroupQuestion.setCallback((ignore, isChecked) -> {
                             if(isChecked){
                                 conditionalQuestion.getView().setVisibility(View.VISIBLE);
-                            }else{
+                                if (isConditionalRequired) {
+                                    allQuestionViews.add(conditionalQuestion);
+                                }
+                            } else {
                                 conditionalQuestion.getView().setVisibility(View.GONE);
+                                if (isConditionalRequired) {
+                                    allQuestionViews.remove(conditionalQuestion);
+                                }
                             }
                         });
                         container.addView(conditionalQuestion.getView());
                     }
                 }
-
                 container.addView(radioGroupQuestion.getView());
             }
             case "dropdown" -> {
@@ -319,19 +325,80 @@ public class QuestionnaireFragment extends Fragment {
             }
         }
 
-        // Track the question view if it's required
         if (questionView != null && isRequired) {
             allQuestionViews.add(questionView);
         }
 
         addQuestionSpacing(container);
     }
-
     private void buildCheckboxGroup(JSONObject question, LinearLayout container) throws JSONException {
+        String questionId = question.getString("id");
+        boolean isRequired = question.optBoolean("required", true);
+
+        final LinearLayout checkboxContainer = new LinearLayout(getContext());
+        checkboxContainer.setOrientation(LinearLayout.VERTICAL);
+
         JSONArray options = question.getJSONArray("options");
+        final List<CheckBox> checkboxes = new ArrayList<>();
         for (int i = 0; i < options.length(); i++) {
             JSONObject option = options.getJSONObject(i);
-            container.addView(new CheckboxQuestion(getContext(), option).getView());
+            CheckBox checkBox = new CheckBox(getContext());
+            checkBox.setText(option.getString("text"));
+            checkBox.setTag(option.getString("value"));
+            checkboxContainer.addView(checkBox);
+            checkboxes.add(checkBox);
+        }
+
+        container.addView(checkboxContainer);
+
+        QuestionView checkboxGroupView = new QuestionView(getContext(), question) {
+
+            @Override
+            protected View createView(Context context) {
+                return checkboxContainer;
+            }
+            @Override
+            protected void addListener() {
+                for (CheckBox checkBox : checkboxes) {
+                    checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                        setValue(getCurrentValue());
+                    });
+                }
+            }
+
+            @Override
+            public String getCurrentValue() {
+                List<String> checkedValues = new ArrayList<>();
+                for (CheckBox checkBox : checkboxes) {
+                    if (checkBox.isChecked()) {
+                        checkedValues.add(checkBox.getTag().toString());
+                    }
+                }
+                if (checkedValues.isEmpty()) {
+                    return null;
+                }
+                return String.join(",", checkedValues);
+            }
+
+            @Override
+            public void updateUI(String value) {
+                if (value != null) {
+                    String[] selected = value.split(",");
+                    for (CheckBox checkBox : checkboxes) {
+                        checkBox.setChecked(false);
+                        for (String s : selected) {
+                            if (checkBox.getTag().equals(s)) {
+                                checkBox.setChecked(true);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        if (isRequired) {
+            allQuestionViews.add(checkboxGroupView);
         }
     }
 
@@ -340,6 +407,14 @@ public class QuestionnaireFragment extends Fragment {
         try {
             if (branchContainer != null) {
                 branchContainer.removeAllViews();
+
+                List<QuestionView> questionsToRemove = new ArrayList<>();
+                for (QuestionView questionView : allQuestionViews) {
+                    if (questionView.getView().getParent() == branchContainer) {
+                        questionsToRemove.add(questionView);
+                    }
+                }
+                allQuestionViews.removeAll(questionsToRemove);
 
                 JSONObject branchSpecificSection = questionnaireData.getJSONObject("questionnaire")
                         .getJSONArray("sections").getJSONObject(1);
@@ -394,8 +469,11 @@ public class QuestionnaireFragment extends Fragment {
             for (QuestionView questionView : allQuestionViews) {
                 String value = questionView.getCurrentValue();
                 if (value == null || value.trim().isEmpty()) {
-                    allAnswered = false;
-                    break;
+                    // For conditional fields, only validate if they're visible
+                    if (questionView.getView().getVisibility() == View.VISIBLE) {
+                        allAnswered = false;
+                        break;
+                    }
                 }
             }
             
@@ -420,26 +498,29 @@ public class QuestionnaireFragment extends Fragment {
     }
 
     private void collectAllResponses() {
-        // Validate all required questions are answered
         List<String> missingQuestions = new ArrayList<>();
-        
+
         for (QuestionView questionView : allQuestionViews) {
-            String value = questionView.getCurrentValue();
-            if (value == null || value.trim().isEmpty()) {
-                missingQuestions.add(questionView.getQuestionId());
+            // Only validate if the question's view is currently VISIBLE
+            if (questionView.getView().getVisibility() == View.VISIBLE) {
+                String value = questionView.getCurrentValue();
+                if (value == null || value.trim().isEmpty()) {
+                    missingQuestions.add(questionView.getQuestionId());
+                }
             }
         }
-        
+
         if (!missingQuestions.isEmpty()) {
-            Toast.makeText(getContext(), "Please answer all required questions marked with *", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Please answer all questions", Toast.LENGTH_SHORT).show();
             return;
         }
-        
+
         for (QuestionView questionView : allQuestionViews) {
             String questionId = questionView.getQuestionId();
             String value = questionView.getCurrentValue();
-            
-            if (value != null && !value.trim().isEmpty()) {
+
+            // Only save if the question has a value AND its view is visible
+            if (value != null && !value.trim().isEmpty() && questionView.getView().getVisibility() == View.VISIBLE) {
                 FirebaseDB.getInstance().setValue(questionId, value, new FirebaseResultCallback() {
                     @Override
                     public void onSuccess() {
@@ -453,7 +534,8 @@ public class QuestionnaireFragment extends Fragment {
                 });
             }
         }
-        
+
+        // Save the current branch separately
         if (currentBranch != null) {
             FirebaseDB.getInstance().setValue("branch", currentBranch, new FirebaseResultCallback() {
                 @Override

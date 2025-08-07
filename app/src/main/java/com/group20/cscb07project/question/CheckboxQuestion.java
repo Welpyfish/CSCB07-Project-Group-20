@@ -19,7 +19,7 @@ public class CheckboxQuestion extends QuestionView{
     }
 
     @Override
-    View createView(Context context) {
+    protected View createView(Context context) {
         checkBox = new CheckBox(context);
         checkBox.setText(getQuestionData("text"));
 
@@ -32,7 +32,7 @@ public class CheckboxQuestion extends QuestionView{
     }
 
     @Override
-    void addListener() {
+    protected void addListener() {
         checkBox.setOnCheckedChangeListener((compoundButton, checked) -> {
             if(checked){
                 setValue("true");

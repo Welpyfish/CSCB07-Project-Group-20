@@ -58,7 +58,6 @@ public class SafetyPlanFragment extends Fragment {
         titleText.setText(R.string.safety_plan_title);
         subtitleText.setText(R.string.safety_plan_subtitle);
 
-        // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance("https://cscb07-project-group-20-default-rtdb.firebaseio.com").getReference();
 
@@ -99,7 +98,6 @@ public class SafetyPlanFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     userResponses = new HashMap<>();
 
-                    // Collect all user responses
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String key = snapshot.getKey();
                         String value = snapshot.getValue(String.class);
@@ -201,7 +199,6 @@ public class SafetyPlanFragment extends Fragment {
         String result = tipContent;
 
         result = result.replace("{answer}", response);
-
         switch (questionId) {
             case "city":
                 result = result.replace("{city}", response);
@@ -230,10 +227,11 @@ public class SafetyPlanFragment extends Fragment {
                 }
                 break;
             case "live_with":
-                if (response.equals("family")) {
-                    result = result.replace("{family}", response);
-                } else if (response.equals("roommates")) {
-                    result = result.replace("{roommates}", response);
+                if (response.equals("partner")) {
+                    String safeRoom = userResponses.get("safe_room");
+                    if (safeRoom != null) {
+                        result = result.replace("{safe_room}", safeRoom);
+                    }
                 }
                 break;
             case "abuse_types":

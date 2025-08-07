@@ -20,7 +20,7 @@ public class RadioGroupQuestion extends QuestionView{
     }
 
     @Override
-    View createView(Context context) {
+    protected View createView(Context context) {
         radioGroup = new RadioGroup(context);
         radioButtons = new ArrayList<>();
         radioGroup.setLayoutParams(new LinearLayout.LayoutParams(
@@ -67,7 +67,7 @@ public class RadioGroupQuestion extends QuestionView{
     }
 
     @Override
-    void addListener() {
+    protected void addListener() {
         radioGroup.setOnCheckedChangeListener((radioGroup, i) -> {
             RadioButton radioButton = radioGroup.findViewById(i);
             setValue(radioButton.getText().toString());
@@ -83,4 +83,6 @@ public class RadioGroupQuestion extends QuestionView{
             }
         }
     }
+
+
 }

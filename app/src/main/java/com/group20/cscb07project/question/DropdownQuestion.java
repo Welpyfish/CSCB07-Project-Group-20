@@ -21,7 +21,7 @@ public class DropdownQuestion extends QuestionView{
     }
 
     @Override
-    View createView(Context context) {
+    protected View createView(Context context) {
         spinner = new Spinner(context);
         spinner.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -46,7 +46,7 @@ public class DropdownQuestion extends QuestionView{
     }
 
     @Override
-    void addListener() {
+    protected void addListener() {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

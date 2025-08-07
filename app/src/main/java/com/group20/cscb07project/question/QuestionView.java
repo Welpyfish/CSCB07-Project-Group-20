@@ -50,8 +50,8 @@ public abstract class QuestionView {
         }
     }
 
-    abstract View createView(Context context);
-    abstract void addListener();
+    protected abstract View createView(Context context);
+    protected abstract void addListener();
 
     private void updateDB(){
         FirebaseDB.getInstance().setValue(questionId, value, new FirebaseResultCallback() {

@@ -22,7 +22,7 @@ public class TextQuestion extends QuestionView{
     }
 
     @Override
-    View createView(Context context) {
+    protected View createView(Context context) {
         textInputLayout = new TextInputLayout(context);
         textInputLayout.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -48,7 +48,7 @@ public class TextQuestion extends QuestionView{
     }
 
     @Override
-    void addListener() {
+    protected void addListener() {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
