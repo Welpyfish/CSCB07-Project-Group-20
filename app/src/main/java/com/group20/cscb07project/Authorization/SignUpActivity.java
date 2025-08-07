@@ -2,16 +2,30 @@ package com.group20.cscb07project.Authorization;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.group20.cscb07project.FloatingExitButton;
 import com.group20.cscb07project.MainActivity;
 import com.group20.cscb07project.R;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -22,17 +36,20 @@ public class SignUpActivity extends AppCompatActivity {
     private TextInputLayout nameLayout;
     private TextInputLayout newPasswordLayout;
     private MaterialButton signUpButton;
-
+    private FirebaseAuth auth;
+    FloatingExitButton exitButton;
+    private static final String TAG = "SignUpActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        // TODO: Initialize Firebase Auth here
-
+        auth = FirebaseAuth.getInstance();
         initializeViews();
         setupClickListeners();
+        exitButton = findViewById(R.id.exitButton);
+        setupEmergencyExit();
         
         // Pre-fill email
         String email = getIntent().getStringExtra("email");
@@ -48,7 +65,7 @@ public class SignUpActivity extends AppCompatActivity {
         emailLayout = findViewById(R.id.email_layout);
         nameLayout = findViewById(R.id.name_layout);
         newPasswordLayout = findViewById(R.id.new_password_layout);
-        signUpButton = findViewById(R.id.sign_in_button); // This is actually the sign up button
+        signUpButton = findViewById(R.id.sign_up_button);
     }
 
     private void setupClickListeners() {
@@ -82,14 +99,49 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setEnabled(false);
         signUpButton.setText("Creating account...");
 
-        // TODO: Implement Firebase user creation with email and password
-        // TODO: Update user profile with display name
-        // TODO: Handle success - navigate to MainActivity
-        // TODO: Handle failure - show appropriate error messages
-        
-        // For now, just show success message and navigate
-        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "createUserWithEmail:success");
+                            Toast.makeText(SignUpActivity.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                        } else {
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            String errorMessage = "Authentication failed.";
+                            try {
+                                throw task.getException();
+                            } catch (FirebaseAuthWeakPasswordException e) {
+                                errorMessage = "Password is too weak. Please choose a stronger one.";
+                                newPasswordLayout.setError(errorMessage);
+                            } catch (FirebaseAuthInvalidCredentialsException e) {
+                                errorMessage = "The email address is malformed or invalid.";
+                                emailLayout.setError(errorMessage);
+                            } catch (FirebaseAuthUserCollisionException e) {
+                                errorMessage = "An account with this email address already exists.";
+                                emailLayout.setError(errorMessage);
+                            } catch (Exception e) {
+                                errorMessage += " " + e.getMessage();
+                            }
+                            Toast.makeText(SignUpActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+
+                            signUpButton.setEnabled(true);
+                            signUpButton.setText("Sign Up");
+                        }
+                    }
+                });
     }
-} 
+    private void setupEmergencyExit() {
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exitButton.setActivity(SignUpActivity.this);
+                exitButton.exitApp();
+            }
+        });
+    }
+}

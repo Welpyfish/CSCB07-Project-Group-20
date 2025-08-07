@@ -72,9 +72,8 @@
     </LinearLayout>
 
 
-    <!-- Floating Exit Button -->
     <com.group20.cscb07project.FloatingExitButton
-        android:id="@+id/exit_button"
+        android:id="@+id/exitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

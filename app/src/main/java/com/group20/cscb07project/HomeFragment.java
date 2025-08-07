@@ -21,8 +21,6 @@ public class HomeFragment extends Fragment {
     private TextView titleText;
     private TextView subtitleText;
 
-    // TODO: Make update lead to non empty questionnaire
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
