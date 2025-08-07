@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         boolean pinExists = PinManager.doesPinExist(this);
 
         MaterialButton pinSignInButton = findViewById(R.id.PINSignInButton);
-        if (FirebaseAuth.getInstance().getCurrentUser()!=null && pinExists) {
+        if (pinExists) {
             pinSignInButton.setVisibility(View.VISIBLE);
             pinSignInButton.setOnClickListener(v -> {
                 showEnterPinFragment();
@@ -87,9 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                     .createSignInIntentBuilder()
                     .setAvailableProviders(providers)
                     .build();
-//            signInLauncher.launch(signInIntent);
-            Intent intent = new Intent(LoginActivity.this, FirebaseAuthView.class);
-            startActivity(intent);
+            signInLauncher.launch(signInIntent);
         });
 
         MaterialButton googleSignInButton = findViewById(R.id.googleSignInButton);

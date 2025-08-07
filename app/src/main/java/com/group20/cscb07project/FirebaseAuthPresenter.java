@@ -1,7 +1,5 @@
-package com.group20.cscb07project.Authorization;
+package com.group20.cscb07project;
 
-
-import com.group20.cscb07project.FirebaseResultCallback;
 
 public class FirebaseAuthPresenter {
 
@@ -18,6 +16,10 @@ public class FirebaseAuthPresenter {
 
 
     public void createAccountEP(String email, String password){
+        if(!email.contains("@")){
+            view.notifyError("invalid email");
+            return;
+        }
         //validate email/pw first
         model.createAccountEmailPassword(email, password, new FirebaseResultCallback(){
             @Override
@@ -34,6 +36,10 @@ public class FirebaseAuthPresenter {
 
 
     public void signInEP(String email, String password) {
+        if(!email.contains("@")){
+            view.notifyError("invalid email");
+            return;
+        }
         model.signInEmailPassword(email, password, new FirebaseResultCallback() {
             @Override
             public void onSuccess() {
