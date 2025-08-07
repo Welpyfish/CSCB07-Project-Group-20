@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.view.inputmethod.EditorInfo;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -35,6 +36,12 @@ public class TextQuestion extends QuestionView{
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         ));
+        
+        editText.setTextDirection(View.TEXT_DIRECTION_LTR);
+        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText.setInputType(android.text.InputType.TYPE_CLASS_TEXT | 
+                             android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        
         textInputLayout.addView(editText);
 
         return textInputLayout;
@@ -45,14 +52,10 @@ public class TextQuestion extends QuestionView{
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 setValue(editable.toString());
@@ -62,8 +65,11 @@ public class TextQuestion extends QuestionView{
 
     @Override
     public void updateUI(String value) {
-        editText.setText(value);
+        if (value != null && !value.equals(editText.getText().toString())) {
+            editText.setText(value);
+            // Set cursor to end of text
+            editText.setSelection(value.length());
+        }
     }
-
 
 }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -54,8 +55,6 @@ public class QuestionnaireFragment extends Fragment {
     private String currentBranch = null;
     private LinearLayout branchContainer;
 
-    // TODO: Implement data collection so we can do safety plan,
-    //  update answers, and data delete
 
 
     @Nullable
@@ -296,7 +295,9 @@ public class QuestionnaireFragment extends Fragment {
             case "checkbox" -> buildCheckboxGroup(question, container);
             case "date" -> {
                 TextQuestion textQuestion = new TextQuestion(getContext(), question);
-                ((TextInputLayout)textQuestion.getView()).getEditText().setInputType(InputType.TYPE_CLASS_DATETIME);
+                EditText dateEditText = ((TextInputLayout)textQuestion.getView()).getEditText();
+                dateEditText.setInputType(InputType.TYPE_CLASS_DATETIME);
+                dateEditText.setTextDirection(View.TEXT_DIRECTION_LTR);
                 container.addView(textQuestion.getView());
             }
         }
