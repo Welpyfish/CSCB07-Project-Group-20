@@ -31,17 +31,6 @@ public abstract class QuestionView {
         this.question = question;
         questionId = getQuestionData("id");
         view = createView(context);
-        FirebaseDB.getInstance().addListener(questionId, new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                updateUI(snapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
         addListener();
     }
 
@@ -85,7 +74,7 @@ public abstract class QuestionView {
     public void setValue(String value){
         if(value!= null && !value.equals(this.value)){
             this.value = value;
-            updateDB();
+            // Don't save to Firebase immediately - wait for submit
         }
     }
 
@@ -93,5 +82,13 @@ public abstract class QuestionView {
 
     public void setCallback(BiConsumer<String, Boolean> callback){
         this.callback = callback;
+    }
+
+    public String getCurrentValue() {
+        return value;
+    }
+
+    public String getQuestionId() {
+        return questionId;
     }
 }

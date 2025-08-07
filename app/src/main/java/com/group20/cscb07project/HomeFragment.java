@@ -40,10 +40,10 @@ public class HomeFragment extends Fragment {
         viewPlanButton.setText(R.string.view_plan);
 
         startQuestionnaireButton.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Future Feature: Always shows empty questionnaire", Toast.LENGTH_LONG).show();
             loadFragment(new QuestionnaireFragment());
         });
         updateAnswersButton.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Future Feature: Shows current responses", Toast.LENGTH_LONG).show();
             loadFragment(new QuestionnaireFragment());
         });
         viewPlanButton.setOnClickListener(v -> loadFragment(new SafetyPlanFragment()));

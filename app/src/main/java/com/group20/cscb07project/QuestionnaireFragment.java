@@ -33,6 +33,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.group20.cscb07project.question.CheckboxQuestion;
 import com.group20.cscb07project.question.DropdownQuestion;
+import com.group20.cscb07project.question.QuestionView;
 import com.group20.cscb07project.question.RadioGroupQuestion;
 import com.group20.cscb07project.question.TextQuestion;
 
@@ -43,7 +44,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -54,6 +57,7 @@ public class QuestionnaireFragment extends Fragment {
     private LinearLayout mainContainer;
     private String currentBranch = null;
     private LinearLayout branchContainer;
+    private List<QuestionView> allQuestionViews = new ArrayList<>();
 
 
 
@@ -242,9 +246,10 @@ public class QuestionnaireFragment extends Fragment {
         String questionId = question.getString("id");
         String questionText = question.getString("question");
         String questionType = question.getString("type");
+        boolean isRequired = question.optBoolean("required", true);
 
         TextView questionTextView = new TextView(getContext());
-        questionTextView.setText(questionText);
+        questionTextView.setText(questionText + (isRequired ? " *" : ""));
         questionTextView.setTextSize(16);
         questionTextView.setTextColor(getResources().getColor(R.color.black));
         questionTextView.setLayoutParams(new LinearLayout.LayoutParams(
@@ -254,10 +259,12 @@ public class QuestionnaireFragment extends Fragment {
         questionTextView.setPadding(0, 0, 0, 32);
         container.addView(questionTextView);
 
+        QuestionView questionView = null;
 
         switch (questionType) {
             case "radio" -> {
                 RadioGroupQuestion radioGroupQuestion = new RadioGroupQuestion(getContext(), question);
+                questionView = radioGroupQuestion;
                 //branch refers to the option that called this
                 radioGroupQuestion.setCallback((branch, isChecked) -> {
                     if(isChecked) {
@@ -271,6 +278,7 @@ public class QuestionnaireFragment extends Fragment {
             }
             case "radio_with_conditional" -> {
                 RadioGroupQuestion radioGroupQuestion = new RadioGroupQuestion(getContext(), question);
+                questionView = radioGroupQuestion;
                 JSONArray options = question.getJSONArray("options");
                 for (int i = 0; i < options.length(); i++) {
                     JSONObject option = options.getJSONObject(i);
@@ -290,16 +298,30 @@ public class QuestionnaireFragment extends Fragment {
 
                 container.addView(radioGroupQuestion.getView());
             }
-            case "dropdown" -> container.addView(new DropdownQuestion(getContext(), question).getView());
-            case "text" -> container.addView(new TextQuestion(getContext(), question).getView());
+            case "dropdown" -> {
+                DropdownQuestion dropdownQuestion = new DropdownQuestion(getContext(), question);
+                questionView = dropdownQuestion;
+                container.addView(dropdownQuestion.getView());
+            }
+            case "text" -> {
+                TextQuestion textQuestion = new TextQuestion(getContext(), question);
+                questionView = textQuestion;
+                container.addView(textQuestion.getView());
+            }
             case "checkbox" -> buildCheckboxGroup(question, container);
             case "date" -> {
                 TextQuestion textQuestion = new TextQuestion(getContext(), question);
+                questionView = textQuestion;
                 EditText dateEditText = ((TextInputLayout)textQuestion.getView()).getEditText();
                 dateEditText.setInputType(InputType.TYPE_CLASS_DATETIME);
                 dateEditText.setTextDirection(View.TEXT_DIRECTION_LTR);
                 container.addView(textQuestion.getView());
             }
+        }
+
+        // Track the question view if it's required
+        if (questionView != null && isRequired) {
+            allQuestionViews.add(questionView);
         }
 
         addQuestionSpacing(container);
@@ -367,13 +389,25 @@ public class QuestionnaireFragment extends Fragment {
 
         submitButton.setOnClickListener(v -> {
             collectAllResponses();
-            Toast.makeText(getContext(), "Responses recorded", Toast.LENGTH_SHORT).show();
             
-            if (getActivity() != null) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new SafetyPlanFragment())
-                    .addToBackStack(null)
-                    .commit();
+            boolean allAnswered = true;
+            for (QuestionView questionView : allQuestionViews) {
+                String value = questionView.getCurrentValue();
+                if (value == null || value.trim().isEmpty()) {
+                    allAnswered = false;
+                    break;
+                }
+            }
+            
+            if (allAnswered) {
+                Toast.makeText(getContext(), "Responses recorded", Toast.LENGTH_SHORT).show();
+                
+                if (getActivity() != null) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new SafetyPlanFragment())
+                        .addToBackStack(null)
+                        .commit();
+                }
             }
         });
         mainContainer.addView(submitButton);
@@ -386,7 +420,40 @@ public class QuestionnaireFragment extends Fragment {
     }
 
     private void collectAllResponses() {
+        // Validate all required questions are answered
+        List<String> missingQuestions = new ArrayList<>();
+        
+        for (QuestionView questionView : allQuestionViews) {
+            String value = questionView.getCurrentValue();
+            if (value == null || value.trim().isEmpty()) {
+                missingQuestions.add(questionView.getQuestionId());
+            }
+        }
+        
+        if (!missingQuestions.isEmpty()) {
+            Toast.makeText(getContext(), "Please answer all required questions marked with *", Toast.LENGTH_LONG).show();
+            return;
+        }
+        
+        for (QuestionView questionView : allQuestionViews) {
+            String questionId = questionView.getQuestionId();
+            String value = questionView.getCurrentValue();
+            
+            if (value != null && !value.trim().isEmpty()) {
+                FirebaseDB.getInstance().setValue(questionId, value, new FirebaseResultCallback() {
+                    @Override
+                    public void onSuccess() {
+                        // Success
+                    }
 
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(getContext(), "Failed to save response for " + questionId, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
+        
         if (currentBranch != null) {
             FirebaseDB.getInstance().setValue("branch", currentBranch, new FirebaseResultCallback() {
                 @Override

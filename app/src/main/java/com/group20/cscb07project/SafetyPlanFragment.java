@@ -1,6 +1,7 @@
 package com.group20.cscb07project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,18 +58,17 @@ public class SafetyPlanFragment extends Fragment {
         titleText.setText(R.string.safety_plan_title);
         subtitleText.setText(R.string.safety_plan_subtitle);
 
+        // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance("https://cscb07-project-group-20-default-rtdb.firebaseio.com").getReference();
 
-        if (getContext() != null && tipsRecyclerView != null) {
-            tipsList = new ArrayList<>();
-            tipAdapter = new TipAdapter(tipsList);
-            tipsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            tipsRecyclerView.setAdapter(tipAdapter);
-            
-            loadQuestionnaireData();
-            loadUserResponses();
-        }
+        tipsList = new ArrayList<>();
+        tipAdapter = new TipAdapter(tipsList);
+        tipsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        tipsRecyclerView.setAdapter(tipAdapter);
+
+        loadQuestionnaireData();
+        loadUserResponses();
 
         return view;
     }
@@ -78,7 +80,7 @@ public class SafetyPlanFragment extends Fragment {
             byte[] buffer = new byte[size];
             inputStream.read(buffer);
             inputStream.close();
-            
+
             String jsonString = new String(buffer, StandardCharsets.UTF_8);
             questionnaireData = new JSONObject(jsonString);
         } catch (IOException | JSONException e) {
@@ -96,7 +98,8 @@ public class SafetyPlanFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     userResponses = new HashMap<>();
-                    
+
+                    // Collect all user responses
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String key = snapshot.getKey();
                         String value = snapshot.getValue(String.class);
@@ -104,71 +107,101 @@ public class SafetyPlanFragment extends Fragment {
                             userResponses.put(key, value);
                         }
                     }
+
                     generateTips();
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.w("SafetyPlan", "Failed to read user responses.", databaseError.toException());
                 }
             });
         }
     }
 
     private void generateTips() {
-        if (questionnaireData == null || userResponses == null || getActivity() == null) {
+        if (questionnaireData == null || userResponses == null) {
             return;
         }
-        
         try {
             JSONObject tipsData = questionnaireData.getJSONObject("tips");
             List<TipAdapter.Tip> newTips = new ArrayList<>();
-            String currentBranch = userResponses.get("branch");
+            String currentBranch = userResponses.get("relationship_status");
+
+            Map<String, List<String>> branchQuestions = new HashMap<>();
+            branchQuestions.put("still_in_relationship", Arrays.asList("abuse_types", "recording_incidents", "emergency_contact"));
+            branchQuestions.put("planning_to_leave", Arrays.asList("leave_date", "go_bag", "emergency_money", "safe_place"));
+            branchQuestions.put("post_separation", Arrays.asList("continued_contact", "protection_order", "safety_tools"));
+
+            List<String> relevantQuestions = branchQuestions.get(currentBranch);
+            if (relevantQuestions == null) {
+                relevantQuestions = new ArrayList<>();
+            }
+
+            List<String> warmUpQuestions = Arrays.asList("relationship_status", "city", "safe_room", "live_with", "children");
+            relevantQuestions.addAll(warmUpQuestions);
+
+            Log.d("SafetyPlan", "Relevant questions for branch " + currentBranch + ": " + relevantQuestions);
 
             for (String questionId : userResponses.keySet()) {
                 String response = userResponses.get(questionId);
-                
+                Log.d("SafetyPlan", "Processing question: " + questionId + " with response: " + response);
+
+                // Only process tips for relevant questions
+                if (!relevantQuestions.contains(questionId)) {
+                    Log.d("SafetyPlan", "Skipping irrelevant question: " + questionId);
+                    continue;
+                }
+
                 if (tipsData.has(questionId)) {
                     Object tipObject = tipsData.get(questionId);
                     String tipContent = null;
 
                     if (tipObject instanceof String) {
-                        // Simple string tip - always show it
                         tipContent = (String) tipObject;
+                        Log.d("SafetyPlan", "Found simple tip for " + questionId + ": " + tipContent);
                     } else if (tipObject instanceof JSONObject) {
-                        // Conditional tip based on response
                         JSONObject conditionalTip = (JSONObject) tipObject;
                         if (conditionalTip.has(response)) {
                             tipContent = conditionalTip.getString(response);
+                            Log.d("SafetyPlan", "Found conditional tip for " + questionId + " with response " + response + ": " + tipContent);
+                        } else {
+                            Log.d("SafetyPlan", "No conditional tip found for " + questionId + " with response " + response);
                         }
                     }
+
                     if (tipContent != null) {
                         tipContent = replacePlaceholders(tipContent, questionId, response);
                         newTips.add(new TipAdapter.Tip(tipContent, questionId));
+                        Log.d("SafetyPlan", "Added tip: " + tipContent);
+                    } else {
+                        Log.d("SafetyPlan", "No tip content found for " + questionId);
                     }
+                } else {
+                    Log.d("SafetyPlan", "No tip found for question: " + questionId);
                 }
             }
+            Log.d("SafetyPlan", "Total tips generated: " + newTips.size());
 
-            if (getActivity() != null && !getActivity().isFinishing()) {
+            if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
-                    if (tipAdapter != null) {
-                        tipAdapter.updateTips(newTips);
-                        if (newTips.size() > 0 && subtitleText != null) {
-                            subtitleText.setText("Safety plans are personal and not guaranteed to prevent harm");
-                        }
+                    tipAdapter.updateTips(newTips);
+                    if (newTips.size() > 0) {
+                        subtitleText.setText("Safety plans are personal and not guaranteed to prevent harm");
                     }
                 });
             }
 
-        } catch (Exception e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     private String replacePlaceholders(String tipContent, String questionId, String response) {
         String result = tipContent;
-        
+
         result = result.replace("{answer}", response);
-        
+
         switch (questionId) {
             case "city":
                 result = result.replace("{city}", response);
@@ -190,7 +223,6 @@ public class SafetyPlanFragment extends Fragment {
                 break;
             case "children":
                 if (response.equals("yes")) {
-                    // Get code word from responses
                     String codeWord = userResponses.get("code_word");
                     if (codeWord != null) {
                         result = result.replace("{code_word}", codeWord);
@@ -198,8 +230,9 @@ public class SafetyPlanFragment extends Fragment {
                 }
                 break;
             case "live_with":
-                if (response.equals("family") || response.equals("roommates")) {
+                if (response.equals("family")) {
                     result = result.replace("{family}", response);
+                } else if (response.equals("roommates")) {
                     result = result.replace("{roommates}", response);
                 }
                 break;
@@ -233,6 +266,5 @@ public class SafetyPlanFragment extends Fragment {
         }
         return result;
     }
-
 
 }
