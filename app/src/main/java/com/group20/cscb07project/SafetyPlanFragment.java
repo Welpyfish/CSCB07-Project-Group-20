@@ -111,7 +111,6 @@ public class SafetyPlanFragment extends Fragment {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.w("SafetyPlan", "Failed to read user responses.", databaseError.toException());
                 }
             });
         }
@@ -139,15 +138,11 @@ public class SafetyPlanFragment extends Fragment {
             List<String> warmUpQuestions = Arrays.asList("relationship_status", "city", "safe_room", "live_with", "children");
             relevantQuestions.addAll(warmUpQuestions);
 
-            Log.d("SafetyPlan", "Relevant questions for branch " + currentBranch + ": " + relevantQuestions);
-
             for (String questionId : userResponses.keySet()) {
                 String response = userResponses.get(questionId);
-                Log.d("SafetyPlan", "Processing question: " + questionId + " with response: " + response);
 
                 // Only process tips for relevant questions
                 if (!relevantQuestions.contains(questionId)) {
-                    Log.d("SafetyPlan", "Skipping irrelevant question: " + questionId);
                     continue;
                 }
 
@@ -157,35 +152,25 @@ public class SafetyPlanFragment extends Fragment {
 
                     if (tipObject instanceof String) {
                         tipContent = (String) tipObject;
-                        Log.d("SafetyPlan", "Found simple tip for " + questionId + ": " + tipContent);
                     } else if (tipObject instanceof JSONObject) {
                         JSONObject conditionalTip = (JSONObject) tipObject;
                         if (conditionalTip.has(response)) {
                             tipContent = conditionalTip.getString(response);
-                            Log.d("SafetyPlan", "Found conditional tip for " + questionId + " with response " + response + ": " + tipContent);
-                        } else {
-                            Log.d("SafetyPlan", "No conditional tip found for " + questionId + " with response " + response);
                         }
                     }
 
                     if (tipContent != null) {
-                        tipContent = replacePlaceholders(tipContent, questionId, response);
+                        tipContent = replaceAllPlaceholders(tipContent);
                         newTips.add(new TipAdapter.Tip(tipContent, questionId));
-                        Log.d("SafetyPlan", "Added tip: " + tipContent);
-                    } else {
-                        Log.d("SafetyPlan", "No tip content found for " + questionId);
                     }
-                } else {
-                    Log.d("SafetyPlan", "No tip found for question: " + questionId);
                 }
             }
-            Log.d("SafetyPlan", "Total tips generated: " + newTips.size());
 
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     tipAdapter.updateTips(newTips);
                     if (newTips.size() > 0) {
-                        subtitleText.setText("Safety plans are personal and not guaranteed to prevent harm");
+                        subtitleText.setText("Safety plans are personal and are not guaranteed to prevent harm");
                     }
                 });
             }
@@ -194,73 +179,18 @@ public class SafetyPlanFragment extends Fragment {
             e.printStackTrace();
         }
     }
-
-    private String replacePlaceholders(String tipContent, String questionId, String response) {
+    private String replaceAllPlaceholders(String tipContent) {
         String result = tipContent;
+        if (userResponses == null) {
+            return result;
+        }
 
-        result = result.replace("{answer}", response);
-        switch (questionId) {
-            case "city":
-                result = result.replace("{city}", response);
-                break;
-            case "safe_room":
-                result = result.replace("{safe_room}", response);
-                break;
-            case "emergency_contact":
-                result = result.replace("{contact_name}", response);
-                break;
-            case "leave_date":
-                result = result.replace("{leave_timing}", response);
-                break;
-            case "emergency_money":
-                result = result.replace("{money_location}", response);
-                break;
-            case "support_type":
-                result = result.replace("{support_choice}", response);
-                break;
-            case "children":
-                if (response.equals("yes")) {
-                    String codeWord = userResponses.get("code_word");
-                    if (codeWord != null) {
-                        result = result.replace("{code_word}", codeWord);
-                    }
-                }
-                break;
-            case "live_with":
-                if (response.equals("partner")) {
-                    String safeRoom = userResponses.get("safe_room");
-                    if (safeRoom != null) {
-                        result = result.replace("{safe_room}", safeRoom);
-                    }
-                }
-                break;
-            case "abuse_types":
-                result = result.replace("{abuse_type}", response);
-                break;
-            case "safe_place":
-                if (response.equals("yes")) {
-                    String tempShelter = userResponses.get("temp_shelter");
-                    if (tempShelter != null) {
-                        result = result.replace("{temp_shelter}", tempShelter);
-                    }
-                }
-                break;
-            case "protection_order":
-                if (response.equals("yes")) {
-                    String legalOrder = userResponses.get("legal_order");
-                    if (legalOrder != null) {
-                        result = result.replace("{legal_order}", legalOrder);
-                    }
-                }
-                break;
-            case "safety_tools":
-                if (response.equals("yes")) {
-                    String equipment = userResponses.get("equipment");
-                    if (equipment != null) {
-                        result = result.replace("{equipment}", equipment);
-                    }
-                }
-                break;
+        for (Map.Entry<String, String> entry : userResponses.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (value != null && !value.trim().isEmpty()) {
+                result = result.replace("{" + key + "}", value);
+            }
         }
         return result;
     }
