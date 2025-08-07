@@ -1,6 +1,12 @@
 package com.group20.cscb07project;
 
+import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +29,11 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.group20.cscb07project.question.CheckboxQuestion;
+import com.group20.cscb07project.question.DropdownQuestion;
+import com.group20.cscb07project.question.RadioGroupQuestion;
+import com.group20.cscb07project.question.TextQuestion;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +44,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class QuestionnaireFragment extends Fragment {
 
@@ -66,6 +78,8 @@ public class QuestionnaireFragment extends Fragment {
         mainContainer.setPadding(96, 96, 96, 96);
 
         scrollView.addView(mainContainer);
+
+        FirebaseDB.getInstance().setPath("/users/"+ Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()+"/");
 
         loadQuestionnaireData();
         buildQuestionnaireFromJSON();
@@ -119,8 +133,8 @@ public class QuestionnaireFragment extends Fragment {
         titleView.setText(title);
         titleView.setTextSize(24);
         titleView.setTextColor(getResources().getColor(R.color.black));
-        titleView.setTypeface(null, android.graphics.Typeface.BOLD);
-        titleView.setGravity(android.view.Gravity.CENTER);
+        titleView.setTypeface(null, Typeface.BOLD);
+        titleView.setGravity(Gravity.CENTER);
         titleView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -216,7 +230,7 @@ public class QuestionnaireFragment extends Fragment {
         sectionTitle.setText(title);
         sectionTitle.setTextSize(18);
         sectionTitle.setTextColor(getResources().getColor(R.color.darkGreen));
-        sectionTitle.setTypeface(null, android.graphics.Typeface.BOLD);
+        sectionTitle.setTypeface(null, Typeface.BOLD);
         sectionTitle.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -241,186 +255,63 @@ public class QuestionnaireFragment extends Fragment {
         questionTextView.setPadding(0, 0, 0, 32);
         container.addView(questionTextView);
 
-        if (questionType.equals("radio")) {
-            buildRadioGroup(question, container);
-        } else if (questionType.equals("radio_with_conditional")) {
-            buildRadioGroupWithConditional(question, container);
-        } else if (questionType.equals("dropdown")) {
-            buildDropdown(question, container);
-        } else if (questionType.equals("text")) {
-            buildTextInput(question, container);
-        } else if (questionType.equals("checkbox")) {
-            buildCheckboxGroup(question, container);
-        } else if (questionType.equals("date")) {
-            buildDateInput(question, container);
+
+        switch (questionType) {
+            case "radio" -> {
+                RadioGroupQuestion radioGroupQuestion = new RadioGroupQuestion(getContext(), question);
+                //branch refers to the option that called this
+                radioGroupQuestion.setCallback((branch, isChecked) -> {
+                    if(isChecked) {
+                        currentBranch = branch;
+                        updateBranchSpecificQuestions(branch);
+                    }else{
+                        //delete all db data under branch. loop over the questions and then delete them
+                    }
+                });
+                container.addView(radioGroupQuestion.getView());
+            }
+            case "radio_with_conditional" -> {
+                RadioGroupQuestion radioGroupQuestion = new RadioGroupQuestion(getContext(), question);
+                JSONArray options = question.getJSONArray("options");
+                for (int i = 0; i < options.length(); i++) {
+                    JSONObject option = options.getJSONObject(i);
+                    if(option.has("conditional_field")){
+                        TextQuestion conditionalQuestion = new TextQuestion(getContext(), option.getJSONObject("conditional_field"));
+                        conditionalQuestion.getView().setVisibility(View.GONE);
+                        radioGroupQuestion.setCallback((ignore, isChecked) -> {
+                            if(isChecked){
+                                conditionalQuestion.getView().setVisibility(View.VISIBLE);
+                            }else{
+                                conditionalQuestion.getView().setVisibility(View.GONE);
+                            }
+                        });
+                        container.addView(conditionalQuestion.getView());
+                    }
+                }
+
+                container.addView(radioGroupQuestion.getView());
+            }
+            case "dropdown" -> container.addView(new DropdownQuestion(getContext(), question).getView());
+            case "text" -> container.addView(new TextQuestion(getContext(), question).getView());
+            case "checkbox" -> buildCheckboxGroup(question, container);
+            case "date" -> {
+                TextQuestion textQuestion = new TextQuestion(getContext(), question);
+                ((TextInputLayout)textQuestion.getView()).getEditText().setInputType(InputType.TYPE_CLASS_DATETIME);
+                container.addView(textQuestion.getView());
+            }
         }
 
         addQuestionSpacing(container);
-    }
-
-    private void buildRadioGroup(JSONObject question, LinearLayout container) throws JSONException {
-        RadioGroup radioGroup = new RadioGroup(getContext());
-        radioGroup.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-        JSONArray options = question.getJSONArray("options");
-        for (int i = 0; i < options.length(); i++) {
-            JSONObject option = options.getJSONObject(i);
-            RadioButton radioButton = new RadioButton(getContext());
-            radioButton.setText(option.getString("text"));
-            radioButton.setId(View.generateViewId());
-            radioButton.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ));
-            radioGroup.addView(radioButton);
-
-            if (question.getString("id").equals("relationship_status")) {
-                radioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    if (isChecked) {
-                        try {
-                            String value = option.getString("value");
-                            currentBranch = value;
-                            updateBranchSpecificQuestions(value);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-        }
-        container.addView(radioGroup);
-    }
-
-    private void buildRadioGroupWithConditional(JSONObject question, LinearLayout container) throws JSONException {
-        RadioGroup radioGroup = new RadioGroup(getContext());
-        radioGroup.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-        JSONArray options = question.getJSONArray("options");
-        for (int i = 0; i < options.length(); i++) {
-            JSONObject option = options.getJSONObject(i);
-            RadioButton radioButton = new RadioButton(getContext());
-            radioButton.setText(option.getString("text"));
-            radioButton.setId(View.generateViewId());
-            radioButton.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ));
-            radioGroup.addView(radioButton);
-
-            if (option.has("conditional_field")) {
-                JSONObject conditionalField = option.getJSONObject("conditional_field");
-                TextInputLayout conditionalLayout = buildConditionalInput(conditionalField);
-                conditionalLayout.setVisibility(View.GONE);
-                container.addView(conditionalLayout);
-
-                radioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    if (isChecked) {
-                        conditionalLayout.setVisibility(View.VISIBLE);
-                    } else {
-                        conditionalLayout.setVisibility(View.GONE);
-                    }
-                });
-            }
-        }
-        container.addView(radioGroup);
-    }
-
-    private TextInputLayout buildConditionalInput(JSONObject field) throws JSONException {
-        TextInputLayout textInputLayout = new TextInputLayout(getContext());
-        textInputLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-        textInputLayout.setHint(field.getString("hint"));
-        textInputLayout.setBoxStrokeColor(getResources().getColor(R.color.darkGreen));
-
-        TextInputEditText editText = new TextInputEditText(getContext());
-        editText.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-        textInputLayout.addView(editText);
-
-        return textInputLayout;
-    }
-
-    private void buildDropdown(JSONObject question, LinearLayout container) throws JSONException {
-        Spinner spinner = new Spinner(getContext());
-        spinner.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-
-        JSONArray options = question.getJSONArray("options");
-        String[] optionsArray = new String[options.length()];
-        for (int i = 0; i < options.length(); i++) {
-            optionsArray[i] = options.getString(i);
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), 
-                android.R.layout.simple_spinner_item, optionsArray);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        container.addView(spinner);
-    }
-
-    private void buildTextInput(JSONObject question, LinearLayout container) throws JSONException {
-        TextInputLayout textInputLayout = new TextInputLayout(getContext());
-        textInputLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-        textInputLayout.setHint(question.getString("hint"));
-        textInputLayout.setBoxStrokeColor(getResources().getColor(R.color.darkGreen));
-
-        TextInputEditText editText = new TextInputEditText(getContext());
-        editText.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-        textInputLayout.addView(editText);
-
-        container.addView(textInputLayout);
     }
 
     private void buildCheckboxGroup(JSONObject question, LinearLayout container) throws JSONException {
         JSONArray options = question.getJSONArray("options");
         for (int i = 0; i < options.length(); i++) {
             JSONObject option = options.getJSONObject(i);
-            CheckBox checkBox = new CheckBox(getContext());
-            checkBox.setText(option.getString("text"));
-            checkBox.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ));
-            container.addView(checkBox);
+            container.addView(new CheckboxQuestion(getContext(), option).getView());
         }
     }
 
-    private void buildDateInput(JSONObject question, LinearLayout container) throws JSONException {
-        TextInputLayout textInputLayout = new TextInputLayout(getContext());
-        textInputLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-        textInputLayout.setHint(question.getString("hint"));
-        textInputLayout.setBoxStrokeColor(getResources().getColor(R.color.darkGreen));
-
-        TextInputEditText editText = new TextInputEditText(getContext());
-        editText.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-        editText.setInputType(android.text.InputType.TYPE_CLASS_DATETIME);
-        textInputLayout.addView(editText);
-
-        container.addView(textInputLayout);
-    }
 
     private void updateBranchSpecificQuestions(String branch) {
         try {
@@ -469,7 +360,7 @@ public class QuestionnaireFragment extends Fragment {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         ));
-        submitButton.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+        submitButton.setBackgroundTintList(ColorStateList.valueOf(
                 getResources().getColor(R.color.darkGreen)));
         submitButton.setPadding(32, 16, 32, 16);
 

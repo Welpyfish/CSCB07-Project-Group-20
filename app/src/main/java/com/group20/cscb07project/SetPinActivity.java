@@ -25,6 +25,8 @@ public class SetPinActivity extends AppCompatActivity {
     private int tries;
     private StringBuilder p;
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
