@@ -191,4 +191,25 @@ public class SignUpPresenterTest {
         verify(view).showEmailError("An account with this email address already exists.");
         verify(view).showToast("An account with this email address already exists.");
     }
+
+    @Test
+    public void testSignUpFailure_UknownError() {
+        when(view.getEmail()).thenReturn("duplicate@example.com");
+        when(view.getName()).thenReturn("John");
+        when(view.getPassword()).thenReturn("password123");
+
+        presenter = new SignUpPresenter(view, model, false);
+        presenter.signUp();
+
+        ArgumentCaptor<FirebaseResultCallback> captor = ArgumentCaptor.forClass(FirebaseResultCallback.class);
+        verify(model).signUp(anyString(), anyString(), captor.capture());
+
+        Exception e = mock(Exception.class);
+        when(e.getMessage()).thenReturn("Something unexpected went wrong");
+        captor.getValue().onFailure(e);
+
+        verify(view).logFailure(e);
+        verify(view).hideProgress();
+        verify(view).showToast(contains("Something unexpected went wrong"));
+    }
 }
