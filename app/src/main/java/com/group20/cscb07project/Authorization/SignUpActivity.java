@@ -2,18 +2,18 @@ package com.group20.cscb07project.Authorization;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.group20.cscb07project.FloatingExitButton;
 import com.group20.cscb07project.MainActivity;
 import com.group20.cscb07project.R;
 
-
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements SignUpView {
 
     private TextInputEditText emailEditText;
     private TextInputEditText nameEditText;
@@ -22,23 +22,31 @@ public class SignUpActivity extends AppCompatActivity {
     private TextInputLayout nameLayout;
     private TextInputLayout newPasswordLayout;
     private MaterialButton signUpButton;
+    private SignUpPresenter presenter;
+    FloatingExitButton exitButton;
 
+    private PinManager pinManager;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        // TODO: Initialize Firebase Auth here
-
         initializeViews();
-        setupClickListeners();
-        
-        // Pre-fill email
+
         String email = getIntent().getStringExtra("email");
         if (email != null && !email.isEmpty()) {
             emailEditText.setText(email);
         }
+
+        presenter = new SignUpPresenter(this, new FirebaseAuthModel(), pinManager.doesPinExist(this));
+
+        signUpButton.setOnClickListener(v -> presenter.signUp());
+
+        exitButton.setOnClickListener(view -> {
+            exitButton.setActivity(SignUpActivity.this);
+            exitButton.exitApp();
+        });
     }
 
     private void initializeViews() {
@@ -48,48 +56,75 @@ public class SignUpActivity extends AppCompatActivity {
         emailLayout = findViewById(R.id.email_layout);
         nameLayout = findViewById(R.id.name_layout);
         newPasswordLayout = findViewById(R.id.new_password_layout);
-        signUpButton = findViewById(R.id.sign_in_button); // This is actually the sign up button
+        signUpButton = findViewById(R.id.sign_up_button);
+        exitButton = findViewById(R.id.exitButton);
     }
 
-    private void setupClickListeners() {
-        signUpButton.setOnClickListener(v -> signUp());
+    // --- SignUpView methods ---
+    @Override
+    public void showProgress() {
+        signUpButton.setEnabled(false);
+        signUpButton.setText("Creating account...");
     }
 
-    private void signUp() {
-        String email = emailEditText.getText().toString().trim();
-        String name = nameEditText.getText().toString().trim();
-        String password = newPasswordEditText.getText().toString().trim();
-        if (email.isEmpty()) {
-            emailLayout.setError("Email is required");
-            return;
-        }
-        if (name.isEmpty()) {
-            nameLayout.setError("Name is required");
-            return;
-        }
-        if (password.isEmpty()) {
-            newPasswordLayout.setError("Password is required");
-            return;
-        }
-        if (password.length() < 6) {
-            newPasswordLayout.setError("Password must be at least 6 characters");
-            return;
-        }
+    @Override
+    public void hideProgress() {
+        signUpButton.setEnabled(true);
+        signUpButton.setText("Sign Up");
+    }
+
+    @Override
+    public void showEmailError(String message) {
+        emailLayout.setError(message);
+    }
+
+    @Override
+    public void showNameError(String message) {
+        nameLayout.setError(message);
+    }
+
+    @Override
+    public void showPasswordError(String message) {
+        newPasswordLayout.setError(message);
+    }
+
+    @Override
+    public void clearErrors() {
         emailLayout.setError(null);
         nameLayout.setError(null);
         newPasswordLayout.setError(null);
+    }
 
-        signUpButton.setEnabled(false);
-        signUpButton.setText("Creating account...");
+    @Override
+    public void navigateToMain() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
 
-        // TODO: Implement Firebase user creation with email and password
-        // TODO: Update user profile with display name
-        // TODO: Handle success - navigate to MainActivity
-        // TODO: Handle failure - show appropriate error messages
-        
-        // For now, just show success message and navigate
-        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+    @Override
+    public void navigateToSetPin() {
+        Intent intent = new Intent(SignUpActivity.this, SetPinActivity.class);
         startActivity(intent);
         finish();
     }
-} 
+
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public String getEmail() {
+        return emailEditText.getText().toString();
+    }
+
+    @Override
+    public String getName() {
+        return nameEditText.getText().toString();
+    }
+
+    @Override
+    public String getPassword() {
+        return newPasswordEditText.getText().toString();
+    }
+}

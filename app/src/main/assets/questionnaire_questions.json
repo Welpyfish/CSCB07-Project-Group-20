@@ -7,7 +7,7 @@
         "title": "Screening Questions",
         "questions": [
           {
-            "id": "relationship_status",
+            "question_id": "relationship_status",
             "type": "radio",
             "question": "Which best describes your situation?",
             "options": [
@@ -30,7 +30,7 @@
             "required": true
           },
           {
-            "id": "city",
+            "question_id": "city",
             "type": "dropdown",
             "question": "What city do you live in?",
             "options": [
@@ -42,14 +42,14 @@
             "required": true
           },
           {
-            "id": "safe_room",
+            "question_id": "safe_room",
             "type": "text",
             "question": "Which room in your home feels the safest if you need to get away quickly?",
             "hint": "e.g. Basement, Bedroom, Laundry room",
             "required": true
           },
           {
-            "id": "live_with",
+            "question_id": "live_with",
             "type": "radio",
             "question": "Who do you live with?",
             "options": [
@@ -77,7 +77,7 @@
             "required": true
           },
           {
-            "id": "children",
+            "question_id": "children",
             "type": "radio_with_conditional",
             "question": "Do you have children?",
             "options": [
@@ -110,7 +110,7 @@
           "still_in_relationship": {
             "questions": [
               {
-                "id": "abuse_types",
+                "question_id": "abuse_types",
                 "type": "checkbox",
                 "question": "Which form(s) of abuse are you experiencing?",
                 "options": [
@@ -138,7 +138,7 @@
                 "required": true
               },
               {
-                "id": "recording_incidents",
+                "question_id": "recording_incidents",
                 "type": "radio",
                 "question": "Are you recording the incidents (dates, times, details)?",
                 "options": [
@@ -156,7 +156,7 @@
                 "required": true
               },
               {
-                "id": "emergency_contact",
+                "question_id": "emergency_contact",
                 "type": "text",
                 "question": "Name one person you can call immediately in an emergency.",
                 "hint": "e.g. mother, father, friend",
@@ -167,14 +167,14 @@
           "planning_to_leave": {
             "questions": [
               {
-                "id": "leave_date",
+                "question_id": "leave_date",
                 "type": "date",
                 "question": "When do you plan to leave?",
                 "hint": "yyyy-MM-dd",
                 "required": true
               },
               {
-                "id": "go_bag",
+                "question_id": "go_bag",
                 "type": "radio",
                 "question": "Do you have a go-bag packed with essentials?",
                 "options": [
@@ -192,14 +192,14 @@
                 "required": true
               },
               {
-                "id": "emergency_money",
+                "question_id": "emergency_money",
                 "type": "text",
                 "question": "Where do you keep emergency cash or cards?",
                 "hint": "e.g. closet, under bed",
                 "required": true
               },
               {
-                "id": "safe_place",
+                "question_id": "safe_place",
                 "type": "radio_with_conditional",
                 "question": "Have you identified a safe place to stay?",
                 "options": [
@@ -227,7 +227,7 @@
           "post_separation": {
             "questions": [
               {
-                "id": "continued_contact",
+                "question_id": "continued_contact",
                 "type": "radio",
                 "question": "Has the abuser continued any contact?",
                 "options": [
@@ -245,7 +245,7 @@
                 "required": true
               },
               {
-                "id": "protection_order",
+                "question_id": "protection_order",
                 "type": "radio_with_conditional",
                 "question": "Do you have a protection order? If yes, which type?",
                 "options": [
@@ -269,7 +269,7 @@
                 "required": true
               },
               {
-                "id": "safety_tools",
+                "question_id": "safety_tools",
                 "type": "radio_with_conditional",
                 "question": "Are you using any safety tools (cameras, door alarms)?",
                 "options": [
@@ -302,7 +302,7 @@
         "description": "Support resources and next steps",
         "questions": [
           {
-            "id": "support_type",
+            "question_id": "support_type",
             "type": "radio",
             "question": "Which type of support would help most right now?",
             "options": [

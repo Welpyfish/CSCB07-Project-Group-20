@@ -2,6 +2,7 @@ package com.group20.cscb07project.Authorization;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.group20.cscb07project.FloatingExitButton;
+import com.group20.cscb07project.MainActivity;
 import com.group20.cscb07project.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class EmailAuthActivity extends AppCompatActivity {
@@ -18,18 +23,20 @@ public class EmailAuthActivity extends AppCompatActivity {
     private TextInputLayout emailLayout;
     private MaterialButton signInButton;
     private MaterialButton signUpButton;
-
+    FloatingExitButton exitButton;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_auth);
 
-        // TODO: Initialize Firebase Auth here
-
+        auth = FirebaseAuth.getInstance();
         initializeViews();
         setupClickListeners();
-        
+        exitButton = findViewById(R.id.exitButton);
+        setupEmergencyExit();
+
         // Pre-fill email
         String email = getIntent().getStringExtra("email");
         if (email != null && !email.isEmpty()) {
@@ -42,6 +49,7 @@ public class EmailAuthActivity extends AppCompatActivity {
         emailLayout = findViewById(R.id.email_layout);
         signInButton = findViewById(R.id.sign_in_button);
         signUpButton = findViewById(R.id.sign_up_button);
+        exitButton = findViewById(R.id.exitButton);
     }
 
     private void setupClickListeners() {
@@ -87,10 +95,13 @@ public class EmailAuthActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // TODO: Check if user is already signed in with Firebase
-        // TODO: If signed in, navigate to MainActivity
+    private void setupEmergencyExit() {
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exitButton.setActivity(EmailAuthActivity.this);
+                exitButton.exitApp();
+            }
+        });
     }
-} 
+}

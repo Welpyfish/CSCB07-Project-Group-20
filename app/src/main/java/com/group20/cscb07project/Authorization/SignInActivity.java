@@ -4,79 +4,97 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.group20.cscb07project.FloatingExitButton;
 import com.group20.cscb07project.MainActivity;
 import com.group20.cscb07project.R;
 
-
-public class SignInActivity extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity implements SignInView {
 
     private TextInputEditText passwordEditText;
     private TextInputLayout passwordLayout;
     private MaterialButton signInButton;
+    private FloatingExitButton exitButton;
 
-    private String userEmail;
+    private SignInPresenter presenter;
+
+    private PinManager pinManager;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        // TODO: Initialize Firebase Auth here
-
-        initializeViews();
-        setupClickListeners();
-        
-        // Get email from intent
-        userEmail = getIntent().getStringExtra("email");
-        if (userEmail == null || userEmail.isEmpty()) {
-            Toast.makeText(this, "Email not provided", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-    }
-
-    private void initializeViews() {
         passwordEditText = findViewById(R.id.password_edit_text);
         passwordLayout = findViewById(R.id.password_layout);
         signInButton = findViewById(R.id.sign_in_button);
-    }
+        exitButton = findViewById(R.id.exitButton);
 
-    private void setupClickListeners() {
-        signInButton.setOnClickListener(v -> signIn());
-    }
-
-    private void signIn() {
-        String password = passwordEditText.getText().toString().trim();
-
-        if (password.isEmpty()) {
-            passwordLayout.setError("Password is required");
+        String userEmail = getIntent().getStringExtra("email");
+        if (userEmail == null || userEmail.isEmpty()) {
+            Toast.makeText(this, "Email not provided", Toast.LENGTH_SHORT).show();
+            finish();
             return;
         }
-        passwordLayout.setError(null);
 
+        presenter = new SignInPresenter(this, new FirebaseAuthModel(), userEmail, pinManager.doesPinExist(this));
+
+        signInButton.setOnClickListener(v -> presenter.signIn());
+
+        exitButton.setOnClickListener(view -> {
+            exitButton.setActivity(SignInActivity.this);
+            exitButton.exitApp();
+        });
+    }
+
+    // --- SignInView methods ---
+    @Override
+    public void showProgress() {
         signInButton.setEnabled(false);
         signInButton.setText("Signing in...");
+    }
 
-        // TODO: Implement Firebase sign in with email and password
-        // TODO: Handle success - navigate to MainActivity
-        // TODO: Handle failure - show error message
-        
-        // For now, just show success message and navigate
+    @Override
+    public void hideProgress() {
+        signInButton.setEnabled(true);
+        signInButton.setText("Sign In");
+    }
+
+    @Override
+    public void showPasswordError(String message) {
+        passwordLayout.setError(message);
+    }
+
+    @Override
+    public void clearPasswordError() {
+        passwordLayout.setError(null);
+    }
+
+    @Override
+    public void navigateToMain() {
         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        // TODO: Check if user is already signed in with Firebase
-        // TODO: If signed in, navigate to MainActivity
+    public void navigateToSetPin() {
+        Intent intent = new Intent(SignInActivity.this, SetPinActivity.class);
+        startActivity(intent);
+        finish();
     }
-} 
+
+    @Override
+    public void showAuthFailed(String message) {
+        Toast.makeText(SignInActivity.this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public String getPassword() {
+        return passwordEditText.getText().toString().trim();
+    }
+}

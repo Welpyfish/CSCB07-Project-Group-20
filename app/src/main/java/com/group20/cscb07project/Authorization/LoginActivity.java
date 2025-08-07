@@ -36,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
     private boolean existsPin;
     FloatingExitButton exitButton;
 
-
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
             new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
@@ -79,15 +78,8 @@ public class LoginActivity extends AppCompatActivity {
 
         MaterialButton emailSignInButton = findViewById(R.id.emailSignInButton);
         emailSignInButton.setOnClickListener(v -> {
-            // Handle email sign-in
-            List<AuthUI.IdpConfig> providers = Arrays.asList(
-                    new AuthUI.IdpConfig.EmailBuilder().build());
-
-            Intent signInIntent = AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .setAvailableProviders(providers)
-                    .build();
-            signInLauncher.launch(signInIntent);
+            Intent intent = new Intent(LoginActivity.this, EmailAuthActivity.class);
+            startActivity(intent);
         });
 
         MaterialButton googleSignInButton = findViewById(R.id.googleSignInButton);
@@ -101,26 +93,6 @@ public class LoginActivity extends AppCompatActivity {
                     .setAvailableProviders(providers)
                     .build();
             signInLauncher.launch(signInIntent);
-
-            //maybe this works
-//            Intent intent = new Intent(LoginActivity.this, FirebaseActivity.class);
-//            startActivity(intent);
-
-        });
-//
-//        TextView signout = findViewById(R.id.SignOutTextView);
-//
-//        signout.setOnClickListener(v -> {
-//            signOut();
-//        });
-    }
-//
-
-
-
-
-
-
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();

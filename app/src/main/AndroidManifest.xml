@@ -34,12 +34,6 @@
             android:name=".Authorization.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".Authorization.AuthenActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Authorization.FirebaseActivity"
-            android:exported="false" />
-        <activity
             android:name=".Authorization.SignInActivity"
             android:exported="false" />
         <activity
