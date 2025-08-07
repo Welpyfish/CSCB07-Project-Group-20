@@ -1,3 +1,1 @@
-This version have all working launch->authen->home pages + exit button 
-
-still missing PIN stuff and inside functionality until final app 
+Everything is done except missing Firebase MVP, rtdb questionnaire + safety plan, rtdb emergency info

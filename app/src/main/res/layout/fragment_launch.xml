@@ -12,7 +12,7 @@
         android:contentDescription="App Logo"
         android:scaleType="centerInside"
         android:layout_marginTop="64dp"
-        android:src="@drawable/backspace"
+        android:src="@drawable/ic_app_logo"
         app:layout_constraintBottom_toTopOf="@+id/welcomeTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

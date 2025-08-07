@@ -1,26 +1,18 @@
-package com.group20.cscb07project;
-
-import static androidx.constraintlayout.widget.ConstraintSet.VISIBLE;
+package com.group20.cscb07project.Authorization;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.LinearLayout;
-import android.view.View;
+
 import java.util.ArrayList;
 import com.google.android.material.button.MaterialButton;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,15 +20,16 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;
-import com.group20.cscb07project.PinManager;
+
+import com.group20.cscb07project.FloatingExitButton;
+import com.group20.cscb07project.MainActivity;
+import com.group20.cscb07project.R;
 
 public class LoginActivity extends AppCompatActivity {
     // See: https://developer.android.com/training/basics/intents/result
@@ -61,8 +54,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_login);
         existsPin = PinManager.doesPinExist(this);
-
         exitButton = findViewById(R.id.exitButton);
+        setupEmergencyExit();
+
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,6 +149,8 @@ public class LoginActivity extends AppCompatActivity {
     private void showEnterPinFragment() {
         View enterPinView = getLayoutInflater().inflate(R.layout.fragment_enter_pin, null);
         setContentView(enterPinView);
+        exitButton = findViewById(R.id.exitButton);
+        setupEmergencyExit();
 
         ImageView[] pinDots = {
                 enterPinView.findViewById(R.id.pinDot1),
@@ -230,6 +226,15 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "No PIN found", Toast.LENGTH_SHORT).show();
         }
+    }
+    private void setupEmergencyExit() {
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exitButton.setActivity(LoginActivity.this);
+                exitButton.exitApp();
+            }
+        });
     }
 
 }

@@ -1,7 +1,6 @@
-package com.group20.cscb07project;
+package com.group20.cscb07project.Authorization;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,8 +13,10 @@ import java.util.List;
 
 import android.widget.TextView;
 import android.widget.Toast;
-import com.group20.cscb07project.PinManager;
 
+import com.group20.cscb07project.FloatingExitButton;
+import com.group20.cscb07project.MainActivity;
+import com.group20.cscb07project.R;
 
 
 public class SetPinActivity extends AppCompatActivity {
@@ -24,6 +25,8 @@ public class SetPinActivity extends AppCompatActivity {
     private ImageView[] pinDots;
     private int tries;
     private StringBuilder p;
+    FloatingExitButton exitButton;
+
 
 
 
@@ -31,6 +34,8 @@ public class SetPinActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_set_pin);
+        exitButton = findViewById(R.id.exitButton);
+        setupEmergencyExit();
 
         p = new StringBuilder();
 
@@ -119,6 +124,15 @@ public class SetPinActivity extends AppCompatActivity {
         }
     }
 
+    private void setupEmergencyExit() {
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exitButton.setActivity(SetPinActivity.this);
+                exitButton.exitApp();
+            }
+        });
+    }
     private void updatePinDots() {
         for (int i = 0; i < PIN_LENGTH; i++) {
             if (i < pin.size()) {

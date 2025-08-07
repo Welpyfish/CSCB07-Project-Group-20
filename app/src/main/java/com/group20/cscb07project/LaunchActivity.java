@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.group20.cscb07project.Authorization.LoginActivity;
+
 public class LaunchActivity extends AppCompatActivity {
     FloatingExitButton exitButton;
     Button getStartedButton;

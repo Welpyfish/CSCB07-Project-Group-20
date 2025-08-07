@@ -1,8 +1,8 @@
 <resources>
     <!-- launch page -->
-    <string name="app_name">App Name</string>
+    <string name="app_name">PATH</string>
     <string name="welcome">Welcome to</string>
-    <string name="disclaimer">NAME is designed to help you create a personalized safety plan.\n\nNAME is not a substitute for emergency services. Safety plans are personal and not guaranteed to prevent harm.</string>
+    <string name="disclaimer">PATH is designed to help you create a personalized safety plan.\n\nPATH is not a substitute for emergency services. Safety plans are personal and not guaranteed to prevent harm.</string>
     <string name="agreement">I understand and agree\nto the above disclaimer.</string>
     <string name="get_started">GET STARTED</string>
 
@@ -14,11 +14,21 @@
     <string name="sign_in_with_email">Sign in with Email</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="sign_in_with_pin">Sign in with PIN</string>
-    <string name="or">or</string>
-    <string name="signup_welcome">Create Your Account</string>
-    <string name="signup_subtitle">Join us to start your safety journey</string>
-    <string name="signup_footer">By creating an account, you agree to our terms and privacy policy</string>
+    <string name="enter_email">Enter your email address</string>
+    <string name="signUp_welcome">Create Your Account</string>
+    <string name="signUp_footer">By creating an account, you agree to our terms and privacy policy</string>
     <string name="app_logo">App Logo</string>
+    <string name="signUp">SIGN UP</string>
+    <string name="signIn">SIGN IN</string>
+    <string name="signIn_welcome">Welcome Back!</string>
+    <string name="incorrect_password">Incorrect Password</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_new_password">New Password</string>
+    <string name="hint_name">First &amp; Last Name</string>
+
+
+
 
     <!-- set PIN page -->
     <string name="set_pin">Set PIN</string>
@@ -46,7 +56,7 @@
 
     <!-- safety Plan -->
     <string name="safety_plan_title">Your Safety Plan</string>
-    <string name="safety_plan_subtitle">Personalized safety strategies based on your situation</string>
+    <string name="safety_plan_subtitle">You can access your personalized safety plan here after you have completed the questionnaire</string>
 
     <!-- exit -->
     <string name="emergency_exit">Emergency Exit</string>
@@ -63,8 +73,31 @@
     <!-- settings -->
     <string name="settings_title">Settings</string>
     <string name="change_pin">Change PIN (future feature)</string>
-    <string name="delete_data">Delete all Data</string>
+    <string name="delete_data">Delete all Data (future feature)</string>
     <string name="signout">Sign Out (future feature)</string>
 
+    <!-- emergency info -->
+
+    <string name="add_edit_contact">Add/Edit Contact</string>
+    <string name="add_edit_location">Add/Edit Location</string>
+    <string name="add_edit_medication">Add/Edit Medication</string>
+    <string name="contact_name">Contact Name</string>
+    <string name="relationship">Relationship</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="address">Address</string>
+    <string name="notes">Notes</string>
+    <string name="medication_name">Medication Name</string>
+    <string name="dosage">Dosage</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_contact">Add Contact</string>
+    <string name="add_location">Add Location</string>
+    <string name="add_medication">Add Medication</string>
+    <string name="edit_contact">Edit Contact</string>
+    <string name="edit_location">Edit Location</string>
+    <string name="edit_medication">Edit Medication</string>
+    <string name="delete_contact">Delete Contact</string>
+    <string name="delete_location">Delete Location</string>
+    <string name="delete_medication">Delete Medication</string>
 
 </resources>

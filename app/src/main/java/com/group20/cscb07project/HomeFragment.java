@@ -20,7 +20,6 @@ public class HomeFragment extends Fragment {
     private MaterialButton viewPlanButton;
     private TextView titleText;
     private TextView subtitleText;
-    FloatingExitButton exitButton;
 
     // TODO: Make update lead to non empty questionnaire
 
