@@ -127,7 +127,7 @@ public class SafetyPlanFragment extends Fragment {
             String currentBranch = userResponses.getOrDefault("branch", "");
 
             Map<String, List<String>> branchQuestions = new HashMap<>();
-            branchQuestions.put("still_in_relationship", Arrays.asList("abuse_types", "recording_incidents", "emergency_contact"));
+            branchQuestions.put("still_in_relationship", Arrays.asList("abuse_type", "recording_incidents", "contact_name"));
             branchQuestions.put("planning_to_leave", Arrays.asList("leave_timing", "go_bag", "money_location", "safe_place"));
             branchQuestions.put("post_separation", Arrays.asList("continued_contact", "protection_order", "safety_tools"));
 

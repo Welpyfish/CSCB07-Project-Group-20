@@ -110,7 +110,7 @@
           "still_in_relationship": {
             "questions": [
               {
-                "id": "abuse_types",
+                "id": "abuse_type",
                 "type": "checkbox",
                 "question": "Which form(s) of abuse are you experiencing?",
                 "options": [
@@ -156,7 +156,7 @@
                 "required": true
               },
               {
-                "id": "emergency_contact",
+                "id": "contact_name",
                 "type": "text",
                 "question": "Name one person you can call immediately in an emergency.",
                 "hint": "e.g. mother, father, friend",
@@ -351,12 +351,12 @@
       "Yes": "Practice your safety plan with your children so that when they hear {code_word}, they know exactly what to do.",
       "No": "Even without children, it helps to identify a second safe space in your home."
     },
-    "abuse_types": "If you face {abuse_type} abuse, remember you don't have to face it alone. Reach out to your emergency contact right away.",
+    "abuse_type": "If you face {abuse_type} abuse, remember you don't have to face it alone. Reach out to your emergency contact right away.",
     "recording_incidents": {
       "Yes": "Log each incident (date, time, and a brief note) so you have clear records if needed later.",
       "No": "Even brief notes on your phone can be helpful. Start logging today."
     },
-    "emergency_contact": "Save {contact_name} in your phone under a code-word so you can quietly call them when you need help.",
+    "contact_name": "Save {contact_name} in your phone under a code-word so you can quietly call them when you need help.",
     "leave_timing": "Set a real target {leave_timing} and pack one essential item each day until you're ready.",
     "go_bag": {
       "Yes": "Great! Keep your go-bag in a hidden spot so you can grab it quickly.",
