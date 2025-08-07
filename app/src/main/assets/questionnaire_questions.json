@@ -302,7 +302,7 @@
         "description": "Support resources and next steps",
         "questions": [
           {
-            "id": "support_type",
+            "id": "support_choice",
             "type": "radio",
             "question": "Which type of support would help most right now?",
             "options": [
@@ -379,6 +379,6 @@
       "Yes": "Make sure your {equipment} is in working order and placed where you'll notice it.",
       "No": "Consider installing a simple door alarm or camera to alert you to unexpected entry."
     },
-    "support_type": "Reach out to {support_choice} - they can offer the specialized help you need right now."
+    "support_choice": "Reach out to {support_choice} - they can offer the specialized help you need right now."
   }
 }

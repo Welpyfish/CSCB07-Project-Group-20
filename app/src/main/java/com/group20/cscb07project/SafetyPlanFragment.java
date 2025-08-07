@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -123,30 +124,32 @@ public class SafetyPlanFragment extends Fragment {
         try {
             JSONObject tipsData = questionnaireData.getJSONObject("tips");
             List<TipAdapter.Tip> newTips = new ArrayList<>();
-            String currentBranch = userResponses.get("relationship_status");
+            String currentBranch = userResponses.getOrDefault("branch", "");
 
             Map<String, List<String>> branchQuestions = new HashMap<>();
             branchQuestions.put("still_in_relationship", Arrays.asList("abuse_types", "recording_incidents", "emergency_contact"));
             branchQuestions.put("planning_to_leave", Arrays.asList("leave_date", "go_bag", "emergency_money", "safe_place"));
             branchQuestions.put("post_separation", Arrays.asList("continued_contact", "protection_order", "safety_tools"));
 
-            List<String> relevantQuestions = branchQuestions.get(currentBranch);
-            if (relevantQuestions == null) {
-                relevantQuestions = new ArrayList<>();
-            }
+            List<String> relevantQuestions = branchQuestions.getOrDefault(currentBranch, new ArrayList<>());
+
+            List<String> combinedRelevantQuestions = new ArrayList<>(relevantQuestions);
 
             List<String> warmUpQuestions = Arrays.asList("relationship_status", "city", "safe_room", "live_with", "children");
-            relevantQuestions.addAll(warmUpQuestions);
+            List<String> followUpQuestions = List.of("support_choice");
+
+            combinedRelevantQuestions.addAll(warmUpQuestions);
+            combinedRelevantQuestions.addAll(followUpQuestions);
 
             for (String questionId : userResponses.keySet()) {
-                String response = userResponses.get(questionId);
 
                 // Only process tips for relevant questions
-                if (!relevantQuestions.contains(questionId)) {
+                if (!combinedRelevantQuestions.contains(questionId)) {
                     continue;
                 }
 
                 if (tipsData.has(questionId)) {
+                    String response = userResponses.get(questionId);
                     Object tipObject = tipsData.get(questionId);
                     String tipContent = null;
 
