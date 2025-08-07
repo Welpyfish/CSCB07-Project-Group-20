@@ -11,6 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.card.MaterialCardView;
+import com.group20.cscb07project.EmergencyInfo.Contacts.ContactsListFragment;
+import com.group20.cscb07project.EmergencyInfo.Locations.LocationsListFragment;
+import com.group20.cscb07project.EmergencyInfo.Medications.MedicationsListFragment;
 import com.group20.cscb07project.R;
 
 public class EmergencyInfoFragment extends Fragment {
