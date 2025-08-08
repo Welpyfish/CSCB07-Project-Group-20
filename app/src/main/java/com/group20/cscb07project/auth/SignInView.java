@@ -1,0 +1,22 @@
+package com.group20.cscb07project.auth;
+
+public interface SignInView {
+    void showProgress();
+
+    void hideProgress();
+
+    void showPasswordError(String message);
+
+    void clearPasswordError();
+
+    void navigateToMain();
+
+    void navigateToSetPin();
+
+    void showAuthFailed(String message);
+
+    String getPassword();
+
+    void logFailure(Exception e);
+    void logSuccess();
+}

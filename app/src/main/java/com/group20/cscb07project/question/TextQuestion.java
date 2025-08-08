@@ -14,7 +14,6 @@ import com.group20.cscb07project.R;
 import org.json.JSONObject;
 
 public class TextQuestion extends QuestionView{
-    private TextInputLayout textInputLayout;
     private TextInputEditText editText;
 
     public TextQuestion(Context context, JSONObject question) {
@@ -23,7 +22,7 @@ public class TextQuestion extends QuestionView{
 
     @Override
     protected View createView(Context context) {
-        textInputLayout = new TextInputLayout(context);
+        TextInputLayout textInputLayout = new TextInputLayout(context);
         textInputLayout.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -61,15 +60,6 @@ public class TextQuestion extends QuestionView{
                 setValue(editable.toString());
             }
         });
-    }
-
-    @Override
-    public void updateUI(String value) {
-        if (value != null && !value.equals(editText.getText().toString())) {
-            editText.setText(value);
-            // Set cursor to end of text
-            editText.setSelection(value.length());
-        }
     }
 
 }

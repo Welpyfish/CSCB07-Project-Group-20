@@ -17,9 +17,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 public class StorageFragment extends Fragment {
     private EditText tester;
-    private DatabaseReference dbRef;
     private DatabaseReference userRef;
 
     @Nullable
@@ -27,8 +28,8 @@ public class StorageFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_storage, container, false);
 
-        dbRef = FirebaseDatabase.getInstance("https://cscb07-project-group-20-default-rtdb.firebaseio.com/").getReference();
-        userRef=dbRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference dbRef = FirebaseDatabase.getInstance("https://cscb07-project-group-20-default-rtdb.firebaseio.com/").getReference();
+        userRef= dbRef.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
 
 
         tester = view.findViewById(R.id.name);

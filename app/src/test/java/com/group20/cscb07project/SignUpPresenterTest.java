@@ -3,11 +3,10 @@ package com.group20.cscb07project;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.group20.cscb07project.Authorization.SignUpPresenter;
-import com.group20.cscb07project.Authorization.SignUpActivity;
-import com.group20.cscb07project.Authorization.FirebaseResultCallback;
-import com.group20.cscb07project.Authorization.SignUpView;
-import com.group20.cscb07project.Authorization.FirebaseAuthModel;
+import com.group20.cscb07project.auth.SignUpPresenter;
+import com.group20.cscb07project.auth.SignUpView;
+import com.group20.cscb07project.firebase.FirebaseAuthService;
+import com.group20.cscb07project.firebase.FirebaseResultCallback;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,13 +17,13 @@ import static org.mockito.Mockito.*;
 public class SignUpPresenterTest {
 
     private SignUpView view;
-    private FirebaseAuthModel model;
+    private FirebaseAuthService model;
     private SignUpPresenter presenter;
 
     @Before
     public void setUp() {
         view = mock(SignUpView.class);
-        model = mock(FirebaseAuthModel.class);
+        model = mock(FirebaseAuthService.class);
     }
 
     @Test

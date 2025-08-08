@@ -32,7 +32,6 @@
 
             <!-- Change PIN -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/change_pin_button"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,7 +45,6 @@
                 app:iconPadding="8dp" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/delete_all_data"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,7 +58,6 @@
                 app:iconPadding="8dp" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/sign_out"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

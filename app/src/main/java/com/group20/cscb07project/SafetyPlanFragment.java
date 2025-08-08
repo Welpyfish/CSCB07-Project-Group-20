@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,7 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,14 +32,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class SafetyPlanFragment extends Fragment {
 
-    private TextView titleText;
     private TextView subtitleText;
-    private RecyclerView tipsRecyclerView;
     private TipAdapter tipAdapter;
-    private List<TipAdapter.Tip> tipsList;
     private JSONObject questionnaireData;
     private Map<String, String> userResponses;
     private FirebaseAuth mAuth;
@@ -52,9 +48,9 @@ public class SafetyPlanFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_safety_plan, container, false);
 
-        titleText = view.findViewById(R.id.safety_plan_title);
+        TextView titleText = view.findViewById(R.id.safety_plan_title);
         subtitleText = view.findViewById(R.id.safety_plan_subtitle);
-        tipsRecyclerView = view.findViewById(R.id.tips_recycler_view);
+        RecyclerView tipsRecyclerView = view.findViewById(R.id.tips_recycler_view);
 
         titleText.setText(R.string.safety_plan_title);
         subtitleText.setText(R.string.safety_plan_subtitle);
@@ -62,7 +58,7 @@ public class SafetyPlanFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance("https://cscb07-project-group-20-default-rtdb.firebaseio.com").getReference();
 
-        tipsList = new ArrayList<>();
+        List<TipAdapter.Tip> tipsList = new ArrayList<>();
         tipAdapter = new TipAdapter(tipsList);
         tipsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         tipsRecyclerView.setAdapter(tipAdapter);
@@ -75,7 +71,7 @@ public class SafetyPlanFragment extends Fragment {
 
     private void loadQuestionnaireData() {
         try {
-            InputStream inputStream = getContext().getAssets().open("questionnaire_questions.json");
+            InputStream inputStream = requireContext().getAssets().open("questionnaire_questions.json");
             int size = inputStream.available();
             byte[] buffer = new byte[size];
             inputStream.read(buffer);
@@ -133,7 +129,7 @@ public class SafetyPlanFragment extends Fragment {
 
             List<String> relevantQuestions = branchQuestions.getOrDefault(currentBranch, new ArrayList<>());
 
-            List<String> combinedRelevantQuestions = new ArrayList<>(relevantQuestions);
+            List<String> combinedRelevantQuestions = new ArrayList<>(Objects.requireNonNull(relevantQuestions));
 
             List<String> warmUpQuestions = Arrays.asList("relationship_status", "city", "safe_room", "live_with", "children");
             List<String> followUpQuestions = List.of("support_choice");
@@ -165,7 +161,7 @@ public class SafetyPlanFragment extends Fragment {
                     } else if (tipObject instanceof JSONObject) {
                         JSONObject conditionalTip = (JSONObject) tipObject;
                         if (conditionalTip.has(response)) {
-                            tipContent = conditionalTip.getString(response);
+                            tipContent = conditionalTip.getString(Objects.requireNonNull(response));
                         }
                     }
 

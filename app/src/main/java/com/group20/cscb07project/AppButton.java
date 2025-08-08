@@ -1,15 +1,12 @@
 package com.group20.cscb07project;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class AppButton extends Button {
+public class AppButton extends androidx.appcompat.widget.AppCompatButton {
 
     public AppButton(@NonNull Context context) {
         super(context);

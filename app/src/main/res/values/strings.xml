@@ -11,17 +11,11 @@
     <string name="PIN">Sign in with PIN</string>
     <string name="google">Sign in with Google</string>
     <string name="email">Sign in with email</string>
-    <string name="sign_in_with_email">Sign in with Email</string>
-    <string name="sign_in_with_google">Sign in with Google</string>
-    <string name="sign_in_with_pin">Sign in with PIN</string>
     <string name="enter_email">Enter your email address</string>
     <string name="signUp_welcome">Create Your Account</string>
-    <string name="signUp_footer">By creating an account, you agree to our terms and privacy policy</string>
-    <string name="app_logo">App Logo</string>
     <string name="signUp">SIGN UP</string>
     <string name="signIn">SIGN IN</string>
     <string name="signIn_welcome">Welcome Back!</string>
-    <string name="incorrect_password">Incorrect Password</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_new_password">New Password</string>
@@ -36,7 +30,6 @@
     <string name="default_web_client_id">674706693867-4na2cbn3fdjseu5fd0a14qahjjl5s3f2.apps.googleusercontent.com</string>
 
     <!-- confirm PIN page -->
-    <string name="confirm_pin">Re-enter PIN</string>
 
     <!-- enter PIN page -->
     <string name="enter_pin">Enter PIN</string>
@@ -66,9 +59,6 @@
     <string name="emergency_contacts">Emergency Contacts</string>
     <string name="safe_locations">Safe Locations</string>
     <string name="medications">Medications</string>
-    <string name="add_item">Add Item</string>
-    <string name="edit_item">Edit Item</string>
-    <string name="delete_item">Delete Item</string>
 
     <!-- settings -->
     <string name="settings_title">Settings</string>
