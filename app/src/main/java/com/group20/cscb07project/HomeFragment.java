@@ -16,22 +16,16 @@ import com.google.android.material.button.MaterialButton;
 
 public class HomeFragment extends Fragment {
 
-    private MaterialButton startQuestionnaireButton;
-    private MaterialButton updateAnswersButton;
-    private MaterialButton viewPlanButton;
-    private TextView titleText;
-    private TextView subtitleText;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        titleText = view.findViewById(R.id.home_title);
-        subtitleText = view.findViewById(R.id.home_subtitle);
-        startQuestionnaireButton = view.findViewById(R.id.start_questionnaire_button);
-        updateAnswersButton = view.findViewById(R.id.update_answers_button);
-        viewPlanButton = view.findViewById(R.id.view_plan_button);
+        TextView titleText = view.findViewById(R.id.home_title);
+        TextView subtitleText = view.findViewById(R.id.home_subtitle);
+        MaterialButton startQuestionnaireButton = view.findViewById(R.id.start_questionnaire_button);
+        MaterialButton updateAnswersButton = view.findViewById(R.id.update_answers_button);
+        MaterialButton viewPlanButton = view.findViewById(R.id.view_plan_button);
 
         titleText.setText(R.string.home_title);
         subtitleText.setText(R.string.home_subtitle);

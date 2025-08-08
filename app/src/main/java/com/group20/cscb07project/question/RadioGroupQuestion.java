@@ -27,7 +27,7 @@ public class RadioGroupQuestion extends QuestionView{
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         ));
-        JSONArray options = getQuestionOptions("options");
+        JSONArray options = getQuestionOptions();
         for (int i = 0; i < options.length(); i++) {
             JSONObject option;
             RadioButton radioButton = new RadioButton(context);
@@ -72,16 +72,6 @@ public class RadioGroupQuestion extends QuestionView{
             RadioButton radioButton = radioGroup.findViewById(i);
             setValue(radioButton.getText().toString());
         });
-    }
-
-    @Override
-    public void updateUI(String value) {
-        for(RadioButton radioButton : radioButtons){
-            if(radioButton.getText().equals(value)){
-                radioGroup.check(radioButton.getId());
-                break;
-            }
-        }
     }
 
 

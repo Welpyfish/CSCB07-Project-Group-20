@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
-import com.group20.cscb07project.EmergencyInfo.EmergencyInfoFragment;
+import com.group20.cscb07project.emergencyinfo.EmergencyInfoFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,13 +87,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public FirebaseDatabase getDatabase() {
-        return db;
-    }
-
-    public FirebaseAuth getAuth() {
-        return auth;
-    }
 }
 
 

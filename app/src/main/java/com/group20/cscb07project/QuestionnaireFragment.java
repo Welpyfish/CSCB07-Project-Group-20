@@ -4,21 +4,15 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,10 +23,10 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.group20.cscb07project.question.CheckboxQuestion;
+import com.group20.cscb07project.firebase.FirebaseDBService;
+import com.group20.cscb07project.firebase.FirebaseResultCallback;
 import com.group20.cscb07project.question.DropdownQuestion;
 import com.group20.cscb07project.question.QuestionView;
 import com.group20.cscb07project.question.RadioGroupQuestion;
@@ -46,19 +40,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class QuestionnaireFragment extends Fragment {
 
     private JSONObject questionnaireData;
-    private Map<String, Object> userResponses = new HashMap<>();
     private LinearLayout mainContainer;
     private String currentBranch = null;
     private LinearLayout branchContainer;
-    private List<QuestionView> allQuestionViews = new ArrayList<>();
+    private final List<QuestionView> allQuestionViews = new ArrayList<>();
 
 
 
@@ -83,7 +74,7 @@ public class QuestionnaireFragment extends Fragment {
 
         scrollView.addView(mainContainer);
 
-        FirebaseDB.getInstance().setPath("/users/"+ Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()+"/");
+        FirebaseDBService.getInstance().setPath("/users/"+ Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()+"/");
 
         loadQuestionnaireData();
         buildQuestionnaireFromJSON();
@@ -93,7 +84,7 @@ public class QuestionnaireFragment extends Fragment {
 
     private void loadQuestionnaireData() {
         try {
-            InputStream inputStream = getContext().getAssets().open("questionnaire_questions.json");
+            InputStream inputStream = requireContext().getAssets().open("questionnaire_questions.json");
             int size = inputStream.available();
             byte[] buffer = new byte[size];
             inputStream.read(buffer);
@@ -148,7 +139,7 @@ public class QuestionnaireFragment extends Fragment {
     }
 
     private void addProgressIndicator() {
-        LinearProgressIndicator progressIndicator = new LinearProgressIndicator(getContext());
+        LinearProgressIndicator progressIndicator = new LinearProgressIndicator(requireContext());
         progressIndicator.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -206,7 +197,7 @@ public class QuestionnaireFragment extends Fragment {
     }
 
     private MaterialCardView createSectionCard() {
-        MaterialCardView card = new MaterialCardView(getContext());
+        MaterialCardView card = new MaterialCardView(requireContext());
         card.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -244,7 +235,7 @@ public class QuestionnaireFragment extends Fragment {
     }
 
     private void buildQuestion(JSONObject question, LinearLayout container) throws JSONException {
-        String questionId = question.getString("id");
+        question.getString("id");
         String questionText = question.getString("question");
         String questionType = question.getString("type");
         boolean isRequired = question.optBoolean("required", true);
@@ -270,7 +261,6 @@ public class QuestionnaireFragment extends Fragment {
                     if(isChecked) {
                         currentBranch = branch;
                         updateBranchSpecificQuestions(branch);
-                    } else {
                     }
                 });
                 container.addView(radioGroupQuestion.getView());
@@ -319,7 +309,7 @@ public class QuestionnaireFragment extends Fragment {
                 TextQuestion textQuestion = new TextQuestion(getContext(), question);
                 questionView = textQuestion;
                 EditText dateEditText = ((TextInputLayout)textQuestion.getView()).getEditText();
-                dateEditText.setInputType(InputType.TYPE_CLASS_DATETIME);
+                Objects.requireNonNull(dateEditText).setInputType(InputType.TYPE_CLASS_DATETIME);
                 dateEditText.setTextDirection(View.TEXT_DIRECTION_LTR);
                 container.addView(textQuestion.getView());
             }
@@ -332,7 +322,7 @@ public class QuestionnaireFragment extends Fragment {
         addQuestionSpacing(container);
     }
     private void buildCheckboxGroup(JSONObject question, LinearLayout container) throws JSONException {
-        String questionId = question.getString("id");
+        question.getString("id");
         boolean isRequired = question.optBoolean("required", true);
 
         final LinearLayout checkboxContainer = new LinearLayout(getContext());
@@ -380,21 +370,6 @@ public class QuestionnaireFragment extends Fragment {
                 return String.join(",", checkedValues);
             }
 
-            @Override
-            public void updateUI(String value) {
-                if (value != null) {
-                    String[] selected = value.split(",");
-                    for (CheckBox checkBox : checkboxes) {
-                        checkBox.setChecked(false);
-                        for (String s : selected) {
-                            if (checkBox.getTag().equals(s)) {
-                                checkBox.setChecked(true);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
         };
 
         if (isRequired) {
@@ -451,7 +426,7 @@ public class QuestionnaireFragment extends Fragment {
     }
 
     private void addSubmitButton() {
-        MaterialButton submitButton = new MaterialButton(getContext());
+        MaterialButton submitButton = new MaterialButton(requireContext());
         submitButton.setText("SUBMIT");
         submitButton.setTextSize(18);
         submitButton.setLayoutParams(new LinearLayout.LayoutParams(
@@ -521,14 +496,15 @@ public class QuestionnaireFragment extends Fragment {
 
             // Only save if the question has a value AND its view is visible
             if (value != null && !value.trim().isEmpty() && questionView.getView().getVisibility() == View.VISIBLE) {
-                FirebaseDB.getInstance().setValue(questionId, value, new FirebaseResultCallback() {
+                FirebaseDBService.getInstance().setValue(questionId, value, new FirebaseResultCallback() {
                     @Override
                     public void onSuccess() {
                         // Success
                     }
 
                     @Override
-                    public void onFailure() {
+                    public void onFailure(Exception e) {
+                        e.printStackTrace();
                         Toast.makeText(getContext(), "Failed to save response for " + questionId, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -537,13 +513,14 @@ public class QuestionnaireFragment extends Fragment {
 
         // Save the current branch separately
         if (currentBranch != null) {
-            FirebaseDB.getInstance().setValue("branch", currentBranch, new FirebaseResultCallback() {
+            FirebaseDBService.getInstance().setValue("branch", currentBranch, new FirebaseResultCallback() {
                 @Override
                 public void onSuccess() {
                 }
 
                 @Override
-                public void onFailure() {
+                public void onFailure(Exception e) {
+                    e.printStackTrace();
                 }
             });
         }

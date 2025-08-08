@@ -11,8 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Objects;
-
 public class DropdownQuestion extends QuestionView{
     private Spinner spinner;
     private ArrayAdapter<String> adapter;
@@ -28,7 +26,7 @@ public class DropdownQuestion extends QuestionView{
                 LinearLayout.LayoutParams.WRAP_CONTENT
         ));
 
-        JSONArray options = getQuestionOptions("options");
+        JSONArray options = getQuestionOptions();
         String[] optionsArray = new String[options.length()];
         for (int i = 0; i < options.length(); i++) {
             try {
@@ -60,13 +58,4 @@ public class DropdownQuestion extends QuestionView{
         });
     }
 
-    @Override
-    public void updateUI(String value) {
-        for(int i=0; i<adapter.getCount(); i++){
-            if(Objects.equals(adapter.getItem(i), value)){
-                spinner.setSelection(i);
-                break;
-            }
-        }
-    }
 }

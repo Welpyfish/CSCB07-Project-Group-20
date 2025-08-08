@@ -42,7 +42,7 @@ public class TipAdapter extends RecyclerView.Adapter<TipAdapter.TipViewHolder> {
     }
 
     static class TipViewHolder extends RecyclerView.ViewHolder {
-        TextView tipText;
+        final TextView tipText;
 
         TipViewHolder(View itemView) {
             super(itemView);
@@ -51,8 +51,8 @@ public class TipAdapter extends RecyclerView.Adapter<TipAdapter.TipViewHolder> {
     }
 
     public static class Tip {
-        private String content;
-        private String questionId;
+        private final String content;
+        private final String questionId;
 
         public Tip(String content, String questionId) {
             this.content = content;
@@ -63,16 +63,5 @@ public class TipAdapter extends RecyclerView.Adapter<TipAdapter.TipViewHolder> {
             return content;
         }
 
-        public void setContent(String content) {
-            this.content = content;
-        }
-
-        public String getQuestionId() {
-            return questionId;
-        }
-
-        public void setQuestionId(String questionId) {
-            this.questionId = questionId;
-        }
     }
 } 
